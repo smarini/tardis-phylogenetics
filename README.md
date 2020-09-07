@@ -8,7 +8,7 @@ For the quickest start, just run our example
 3. Run `xxx`
 4. Profit! You results are in `xxx`
 
-Make sure [dependencies](#Dependendencies-and-OS) are installed
+Make sure [dependencies](#Dependendencies-and-OS) are installed.
 
 
 ## Input
@@ -21,7 +21,7 @@ To run TARDiS, you will need the following inputs:
 ## Shiny GUI
 For experimenting with TARDiS, you can run the Shiny app in `shiny_local`, your results will be in `shiny_local/output`.
 
-![Shiny GUI](shiny_local/logo.png)
+![Shiny GUI](/shiny_local/logo.png)
 
 Important: **this GUI is intended for experimenting with small sets**, and small GA populations. All the GUI outputs are stored as `shiny_local/output/jc.distance.precalc.rds`. If you don't have a distance file, the `Jukes-Cantor distance` calculates the genomic distance. This distance files is to used as part of the TARDiS input. For large data sets, please use the command line instead. 
 
@@ -39,12 +39,12 @@ TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sa
 
 ## Dependendencies and OS
 To run local/hpc command line TARDiS, please install
-* ![DECIPHER](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
-* ![optparse](https://cran.r-project.org/web/packages/optparse/index.html)
-* ![doRNG](https://cran.r-project.org/web/packages/doRNG/index.html)
-* ![dplyr](https://cran.r-project.org/web/packages/dplyr/index.html)
-* ![ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
-* ![gridExtra](https://cran.r-project.org/web/packages/gridExtra/index.html)
+* [DECIPHER](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
+* [optparse](https://cran.r-project.org/web/packages/optparse/index.html)
+* [doRNG](https://cran.r-project.org/web/packages/doRNG/index.html)
+* [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html)
+* [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
+* [gridExtra](https://cran.r-project.org/web/packages/gridExtra/index.html)
 
 * xxx NF stuff
 
