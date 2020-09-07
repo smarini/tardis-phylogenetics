@@ -1,0 +1,165 @@
+#!/bin/bash
+
+TARDIS_HOME=$(dirname $0)
+
+NGENS=10
+AFILE="aln.fa"
+DFILE="jc.distance.precalc.csv"
+MFILE="metadata.csv"
+MODE="GA"
+DEBUG=""
+CONFS=""
+
+# Colors are fun...
+B='\033[1;34m'
+Y='\033[1;33m'
+R='\033[1;31m'
+N='\033[0m'
+
+usage() {
+    echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
+    echo
+    echo "Usage: tardis [options] dataset"
+    echo 
+    echo "where 'dataset' is the dataset name. The program assumes that the current directory"
+    echo "contains a configuration file called DATASET.config, and a subdirectory called data/,"
+    echo "containing in turn a subdirectory named after the dataset. The three files indicated"
+    echo "by the -a, -d, and -m options should be located in that directory."
+    echo
+    echo "Options:"
+    echo
+    echo " -b       | Enable brute-force method (default: GA method)"
+    echo " -n NGENS | Set number of generations for GA (defaut: $NGENS)"
+    echo " -a AFILE | Name of alignment file (default: $AFILE)"
+    echo " -d DFILE | Name of distances file (default: $DFILE)"
+    echo " -m MFILE | Name of metadata file (default: $MFILE)"
+    echo " -x       | Enable debug mode (will not delete intermediate files)"
+    echo " -v       | Display version number and copyright notice"
+    echo
+}
+
+while getopts ":n:a:d:m:xbhv" opt; do
+    case ${opt} in
+	n ) 
+	    NGENS=$OPTARG
+	    ;;
+	a )
+	    AFILE=$OPTARG
+	    ;;
+	d )
+	    DFILE=$OPTARG
+	    ;;
+	m )
+	    MFILE=$OPTARG
+	    ;;
+	x )
+	    DEBUG="y"
+	    ;;
+	b )
+	    MODE="BF"
+	    ;;
+	v )
+	    echo -e ${B}
+	    echo H4sIALuOCF8AA7VVUZLDIAj95zQGFZrjtDbe/wiLmzpGo4Z0docxOIjPByhBg1p5m2dtgZlzknbDR4KPPkL6FOGwj1Yw9EBgx78jBeZAm0OZe+cWj87R6q2sEBprcLPr8VwO0KGj5gB9QgV95+MNRQq0kiVf4PNmcXBIkR95i4aRKmG9TCdG3TofU1fbaxho3Mt5F/YEczo5uyedx8gOPTpaGGgXZjAteZhHNYcBbXKGpaqjSVckz9oop6U6a4pjmGGpNBVXlGoMA3dy3GoYR3sNA7NkqUp17zkMS/WHr+pKK19VX59u2H+9qtdXDVDk1ULlmB9kUf4FFu3vQDF7TxutTOQZ2crMsXhI76Yjq+p340gae2SU5u5oEQiUzdLmaRGbJenp4hE5Acs6OxDHSJsmwrP0Y5YIzRN+AAWDMfD4BwAA|base64 -d|zcat|xxd -r -p
+	    echo -e ${N}
+	    exit 222
+	    ;;
+
+	h )
+	    usage
+	    exit 0
+	    ;;
+	\? )
+	    echo "Invalid option: $OPTARG"
+	    usage
+	    exit 1
+	    ;;
+	: )
+	    echo "Invalid option: $OPTARG requires an argument."
+	    usage
+	    exit 1
+	    ;;
+    esac
+done
+shift $((OPTIND - 1))
+DATASET=$1
+if [ "$DATASET" == "" ];
+then
+  usage
+  exit 1
+fi
+
+CONF=${DATASET}.config
+if [ ! -f $CONF ];
+then
+  echo "Configuration file $CONF not found!"
+  exit 1
+fi
+echo Configuration file found: $CONF
+
+# Make R available in your environment
+module load R
+
+# Check that the input directory exists.
+INDIR=data/$DATASET
+
+if [ ! -d $INDIR ];
+then
+  echo "Directory $INDIR not found!"
+  exit 2
+fi
+if [ ! -f $INDIR/$AFILE ];
+then
+  echo "Alignments file $INDIR/$AFILE not found!"
+  exit 2
+fi
+if [ ! -f $INDIR/$MFILE ];
+then
+  echo "Metadata file $INDIR/$MFILE not found!"
+  exit 2
+fi
+if [ ! -f $INDIR/$DFILE ];
+then
+  echo "Distances file $INDIR/$DFILE not found - generating..."
+  Rscript ${TARDIS_HOME}/bin/pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
+fi
+echo Data directory found: $INDIR
+
+OUTDIR=output/${DATASET}
+FASTAS=""
+
+if [ "$MODE" == "BF" ];
+then
+  echo "*** Executing Brute Force method..."
+  Rscript ${TARDIS_HOME}/bin/brute.force.R -s $DATASET -d $INDIR/$DFILE -m $INDIR/$MFILE
+  echo "*** Brute Force done."
+else
+  echo "*** Executing GA method..."
+  nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data_set $DATASET --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS
+  Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE
+  echo "*** GA done."
+  echo
+fi
+
+# Collect results
+echo "*** Collecting results:"
+for res in $OUTDIR/subsample.${MODE}.*.csv; do
+  NG=$(grep -c $ $res)
+  echo "  ${res}: $NG genomes"
+  FA=${res%.csv}.fa
+  ${TARDIS_HOME}/bin/extractSeqs.py $INDIR/$AFILE $res > $FA
+  FASTAS="$FASTAS $FA"
+done
+echo
+
+if [ "$DEBUG" != "y" ];
+then
+  rm -rf work
+  rm -f $OUTDIR/${MODE}.*.fitness.csv $OUTDIR/${MODE}.*.subsamples.csv
+fi
+
+echo -e "${R}*** Final results:"
+for fa in $FASTAS; do
+  echo "  $fa"
+done
+echo -e $N

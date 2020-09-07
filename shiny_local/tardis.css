@@ -1,0 +1,35 @@
+h1 {
+  font-family: 'Helvetica', cursive;
+  font-weight: 800;
+  color: cornflowerblue;
+  text-align: center;
+  line-height: 2;
+  }
+
+h3 {
+  font-family: 'Helvetica', cursive;
+  font-weight: 700;
+  font-size: medium;
+  color: #E9967A;
+  text-align: center;
+  }
+
+.shiny-notification {
+  position:fixed;
+  top: calc(75%);
+  left: calc(50%);
+  font-family: 'Helvetica', cursive;
+  font-weight: 500;
+  font-size: medium;
+  color: black;
+  text-align: center;
+  background-color: cornflowerblue;
+  }
+
+body {
+  background-color: #EDEDE0;
+  }
+
+input:invalid {
+  background-color: #E9967A;
+  }
