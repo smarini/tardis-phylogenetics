@@ -2,13 +2,11 @@
 Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 
 ## Quick start
-For the quickest start, just run our example
+Make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example
 
 2. Download TARDiS
-3. Run `tardis example`
-4. Profit! You results are in `output/example`
-
-Make sure [dependencies](#Dependendencies-and-OS) are installed.
+3. Run `[path to tardis-phylogenetics]/tardis example`
+4. Profit! You results are in `[path to tardis-phylogenetics]/output/example`
 
 
 ### Input
@@ -39,6 +37,7 @@ TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sa
 
 ## Dependendencies and OS
 To run local/hpc command line TARDiS, please install
+* [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html)
 * [DECIPHER](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 * [optparse](https://cran.r-project.org/web/packages/optparse/index.html)
 * [doRNG](https://cran.r-project.org/web/packages/doRNG/index.html)
@@ -54,13 +53,13 @@ TARDiS has been successfully used on Ubuntu (local) and SLURM (hpc). Please let 
 * [Simone Marini](https://github.com/smarini)
 * [Alberto Riva](https://github.com/albertoriva)
 
-## Licence
+## License
 TARDiS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
- This program is distributed in the hope that it will be useful,
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
