@@ -51,7 +51,8 @@ To run local/hpc command line TARDiS, please install
 TARDiS has been successfully used on Ubuntu (local) and SLURM (hpc). Please let use know if you are using on other platforms.
 
 ## Contacts
-@smarini and @albertoriva.
+* [Simone Marini](https://github.com/smarini)
+* [Alberto Riva](https://github.com/albertoriva)
 
 ## Licence
 TARDiS is free software: you can redistribute it and/or modify

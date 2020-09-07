@@ -105,7 +105,7 @@ server <- function(input, output, session) {
 
   output$to_run <- renderText({ paste("Tardis will run on", input$tot.gen.size,
                                       "individuals per generation, handled by", input$n.cores,
-                                      "cores in parallel, for", input$n.gen,
+                                      "cores, for", input$n.gen,
                                       "generations, counted as 0 to", (input$n.gen-1), "\n"
                                       ) })
   
