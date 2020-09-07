@@ -5,33 +5,33 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 For the quickest start, just run our example
 
 2. Download TARDiS
-3. Run `xxx`
-4. Profit! You results are in `xxx`
+3. Run `tardis example`
+4. Profit! You results are in `output/example`
 
 Make sure [dependencies](#Dependendencies-and-OS) are installed.
 
 
-## Input
+### Input
 To run TARDiS, you will need the following inputs:
 
 * A genomic data set in fasta format (example: `data/example/aln.fa`)
 * A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example `data/example/jc.distance.precalc.csv`). Note that this function work for *aligned* fasta files
 * A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example in `data/example/metadata.csv`)
 
-## Shiny GUI
+### Shiny GUI
 For experimenting with TARDiS, you can run the Shiny app in `shiny_local`, your results will be in `shiny_local/output`.
 
-![Shiny GUI](/shiny_local/logo.png)
+![Shiny GUI](/shiny_local/gui.png)
 
 Important: **this GUI is intended for experimenting with small sets**, and small GA populations. All the GUI outputs are stored as `shiny_local/output/jc.distance.precalc.rds`. If you don't have a distance file, the `Jukes-Cantor distance` calculates the genomic distance. This distance files is to used as part of the TARDiS input. For large data sets, please use the command line instead. 
 
-## Command line ([Nextflow](https://www.nextflow.io/), local)
+### Command line ([Nextflow](https://www.nextflow.io/), local)
 On a single machine, you can run TARDiS as explained above. Depending on your resources, if you are considering a large solution population, you can use more than one batch, i.e, each GA generation will be processed in batches. Parameters can be specified by command line (see `tarids --help`), or by a configuration file, named after your data set (example `example.config`).
 
-## Command line ([Nextflow](https://www.nextflow.io/), hpc)
+### Command line ([Nextflow](https://www.nextflow.io/), hpc)
 Particularly large data sets can be run on hpc. To do so, you need generate an a nexflow configuration file for the specific workload manager in use. We provide an example file for SLURM in `hpc.nextflow.config`.
 
-## Options
+### Options
 Run `tarids --help` to check out all the running options. Note that for reproducibility of the results, the user can specify the seeds to be used in `data/seeds.txt`.
 
 ## Yes but what TARDiS do exactly?
@@ -46,14 +46,12 @@ To run local/hpc command line TARDiS, please install
 * [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html)
 * [gridExtra](https://cran.r-project.org/web/packages/gridExtra/index.html)
 
-* xxx NF stuff
-
-* ![Shiny](https://www.r-project.org/nosvn/pandoc/shiny.html) is needed for the GUI.
+* [Shiny](https://www.r-project.org/nosvn/pandoc/shiny.html) is needed for the GUI.
 
 TARDiS has been successfully used on Ubuntu (local) and SLURM (hpc). Please let use know if you are using on other platforms.
 
 ## Contacts
-Simone Marini and Alberto Riva xxx
+@smarini and @albertoriva.
 
 ## Licence
 TARDiS is free software: you can redistribute it and/or modify
