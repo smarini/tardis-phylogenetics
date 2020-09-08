@@ -37,8 +37,8 @@ option_list = list(
               help="number of overall batches per generation"),
   make_option(c("--basedir"), type="character", default=getwd(), 
               help="base directory"),
-  make_option(c("--dist.opt"), type="character", default="highest", 
-              help="Genetic distance optimized towards its highest, mean, or median point"),
+  make_option(c("--dist.opt"), type="character", default="max", 
+              help="Genetic distance optimized towards its max, mean, or median point"),
   make_option(c("--seeds"), type="character", default="data/seeds.txt", 
               help="file with a seeds per line/generation")
               )
@@ -52,25 +52,23 @@ if(!opt$shiny){
   source('../bin/read.distance.matrix.R')
 }
 
-metadata = read.table(opt$metadata, sep = ',', stringsAsFactors = FALSE, header = TRUE)
-
 seeds = as.numeric(readLines(opt$seeds))
-
+metadata = read.table(opt$metadata, sep = ',', stringsAsFactors = FALSE, header = TRUE)
 dist.m = read.distance.matrix(opt$distance)
 
 ### CHECK METADATA
 metadata = metadata[sapply(colnames(dist.m), function(x,df){which(metadata$Accession.ID == x)}, df=df),] # make sure id order is respected
 metadata$Collection.date = as.Date(metadata$Collection.date, format = "%d/%m/%Y")
-if(any(is.na(metadata$Collection.date))) { message("NAs found in dates, check date format") }
+if(any(is.na(metadata$Collection.date))) { stop("NAs found in dates, check date format") }
 
 cl <- parallel::makeCluster(opt$n.cores)
 doParallel::registerDoParallel(cl)
-set.seed(seeds[(opt$generation*tot.batches)+opt$batch])
 
+set.seed(seeds[(opt$generation*opt$tot.batches)+opt$batch])
 
 pairs.per.subsample = ((opt$n.samples^2)-opt$n.samples)/2
 
-if(opt$dist.opt == 'highest') { max.d = sum(sort(dist.m, decreasing = TRUE)[1:pairs.per.subsample]) # estimate max distance based on largest paired distances
+if(opt$dist.opt == 'max') { max.d = sum(sort(dist.m, decreasing = TRUE)[1:pairs.per.subsample]) # estimate max distance based on largest paired distances
 }else{
   if(opt$dist.opt == 'mean' | opt$dist.opt == 'median') { 
     ### pairwise genetic diversity to percentile
@@ -175,7 +173,7 @@ output <- foreach(i=1:dim(subsamples)[1] ) %dorng% {
   # fitness score with rescaling
   tem.diversity = 1 - (time.spread/max.time.spread) +10^(-64)
   avg.gen.diversity = gen.diversity/dim(d)[2]
-  if(opt$dist.opt == 'highest') { gen.diversity = (gen.diversity/max.d) +10^(-64)  }
+  if(opt$dist.opt == 'max') { gen.diversity = (gen.diversity/max.d) +10^(-64)  }
   if(opt$dist.opt == 'median') {
     gen.diversity = 1 - abs(distances.perc(avg.gen.diversity) - 0.5)
   }

@@ -25,7 +25,7 @@ ui <- fluidPage(
     column( 3, offset = 1,
            numericInput("n.samples", "Sequences per individual", 5, min = 2, max = 500),
            verbatimTextOutput("n.samples"),
-           numericInput("tot.gen.size", "Individuals per generation", 1000, min = 100, max = 10000),
+           numericInput("tot.gen.size", "Individuals per generation", 100, min = 100, max = 10000),
            verbatimTextOutput("tot.gen.size"),
            numericInput("n.cores", "Number of cores", 1, min = 1, max = 8),
            verbatimTextOutput("n.cores"),
@@ -48,7 +48,7 @@ ui <- fluidPage(
            numericInput("w.tem", "Temporal diversity weigth:", 1, min = 0, max = 10, step = 0.01),
            verbatimTextOutput("w_tem"),
            selectInput("dist.opt", "Optimize genetic diversity",
-                       c("Highest diversity" = "highest",
+                       c("Max diversity" = "max",
                          "Representative of set mean" = "mean",
                          "Representative of set median" = "median") ),
            actionButton("JC", HTML("Jukes-Cantor <br/> distance"), style="color: #fff; font-weight: 800; background-color: #6495ED;")

@@ -1,3 +1,6 @@
+#!/usr/bin/env Rscript
+
+# libraries
 library(optparse)
 library(DECIPHER)
 

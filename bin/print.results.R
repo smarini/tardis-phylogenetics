@@ -12,7 +12,7 @@ option_list = list(
   make_option(c("-s", "--data.set"), type="character", default="Norway", 
               help="dataset name"),
   make_option(c("-d", "--distance"), type="character", default='jc.distance.precalc.csv', 
-              help="output genome distance matrix file name, should be an csv"),
+              help="genome distance matrix file name, should be an csv"),
   make_option(c("--generations"), type="numeric", default=10, 
               help="number of generations"),
   make_option(c("--n.subsamples"), type="numeric", default=3, 
