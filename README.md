@@ -43,7 +43,7 @@ TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sa
 ## Dependendencies and OS
 To run local/hpc command line TARDiS, please install
 * [R >= 3.6.1](https://www.r-project.org/)
-* [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html)
+* [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)
 * [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 * [optparse >= 1.6.6](https://cran.r-project.org/web/packages/optparse/index.html)
 * [doRNG >= 1.8.2](https://cran.r-project.org/web/packages/doRNG/index.html)
