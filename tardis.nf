@@ -1,21 +1,29 @@
 #!/usr/bin/env nextflow
 
 params.data_set = "USA"
-params.nsamples = 10
+params.n_samples = 10
 params.gensize = 100
 params.nbatches = 5
-params.ncores = 2
+params.n_cores = 2
 params.ngenerations = 10
 
-params.fracnew = 0.14
-params.fracevolved = 0.85
-params.fracelite = 0.01
+params.frac_new = 0.14
+params.frac_evolved = 0.85
+params.frac_elite = 0.01
 
+params.w_div = 1
+params.w_tem = 1
+params.dist_opt = "max"
+
+params.seeds = "data/seeds.txt"
 params.distances = "jc.distance.precalc.csv"
 params.metadata = "metadata.csv"
+params.outdir = "output/${params.data_set}"
+params.afile = ""
 
 init = Channel.from(0)
 incr = Channel.create()
+endg = Channel.from(-1)
 
 batches = Channel.from(1..params.nbatches)
 
@@ -35,7 +43,7 @@ process Init {
 	  echo "Error: this program expects a subdirectory called data/${params.data_set} in the current directory."
 	  exit 1
 	fi
-	mkdir -p ${workflow.launchDir}/output/${params.data_set}
+	checkParams.py ${params.frac_new} ${params.frac_evolved} ${params.frac_elite} ${params.gensize} ${params.dist_opt}
 	"""
 }
 
@@ -45,7 +53,7 @@ Channel
 	.until { it >= params.ngenerations }
 	.set { igens }
 	
-generations = start.concat(igens)
+generations = start.concat(igens).concat(endg)
 
 process Generation {
 	executor "local"
@@ -55,6 +63,7 @@ process Generation {
 
 	output:
 	val gen into combo
+	val gen into terminate
 
 	"""
 	#!/bin/bash
@@ -76,6 +85,9 @@ process DoIt {
 	output:
 	tuple gen, batch into genend
 
+	when:
+	gen >= 0
+
 	"""
 	#!/bin/bash
 	echo "Generation $gen, Batch $batch"
@@ -83,22 +95,24 @@ process DoIt {
 	then
 	  fnew=1; fevo=0; feli=0
         else
-          fnew=${params.fracnew}; fevo=${params.fracevolved}; feli=${params.fracelite}
+          fnew=${params.frac_new}; fevo=${params.frac_evolved}; feli=${params.frac_elite}
         fi
 	Rscript ${workflow.projectDir}/bin/make.gen.R \
           --frac.new \$fnew \
 	  --frac.evo \$fevo \
 	  --frac.eli \$feli \
-	  --nsamples ${params.nsamples} \
+	  --n.samples ${params.n_samples} \
 	  --gen.size ${params.gensize} \
 	  --tot.batches ${params.nbatches} \
-	  --n_cores ${params.ncores} \
-	  --data_set ${params.data_set} \
-          --w_div 1 \
-          --w_tem 1 \
+	  --n.cores ${params.n_cores} \
+	  --data.set ${params.data_set} \
+          --w.div ${params.w_div} \
+          --w.tem ${params.w_tem} \
           --generation $gen \
           --batch $batch \
+	  --dist.opt ${params.dist_opt} \
 	  --basedir ${workflow.launchDir} \
+          --seeds ${workflow.launchDir}/${params.seeds} \
 	  --distance ${workflow.launchDir}/${params.distances} \
 	  --metadata ${workflow.launchDir}/${params.metadata}
 	"""
@@ -124,4 +138,18 @@ process Collect {
 	"""
 }
 
+process Conclusion {
+	executor "local"
 
+	input:
+	val gen from terminate
+
+	when:
+	gen == -1
+
+	script:
+	"""
+	#!/bin/bash
+	extractSeqs.py ${workflow.launchDir}/${params.outdir} ${workflow.launchDir}/${params.afile} ${params.ngenerations} ${params.nbatches} ${params.n_samples} GA.${params.data_set}
+	"""
+}

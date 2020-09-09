@@ -126,6 +126,9 @@ fi
 echo Data directory found: $INDIR
 
 OUTDIR=output/${DATASET}
+mkdir -p $OUTDIR
+rm -f ${OUTDIR}/*
+
 FASTAS=""
 
 if [ "$MODE" == "BF" ];
@@ -135,7 +138,8 @@ then
   echo "*** Brute Force done."
 else
   echo "*** Executing GA method..."
-  nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data_set $DATASET --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS
+  nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data.set $DATASET --distances $INDIR/$DFILE \
+               --metadata $INDIR/$MFILE --ngenerations $NGENS --outdir $OUTDIR --afile $INDIR/$AFILE
   Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE
   echo "*** GA done."
   echo
@@ -143,13 +147,15 @@ fi
 
 # Collect results
 echo "*** Collecting results:"
-for res in $OUTDIR/subsample.${MODE}.*.csv; do
-  NG=$(grep -c $ $res)
-  echo "  ${res}: $NG genomes"
-  FA=${res%.csv}.fa
-  ${TARDIS_HOME}/bin/extractSeqs.py $INDIR/$AFILE $res > $FA
-  FASTAS="$FASTAS $FA"
-done
+#for res in $OUTDIR/subsample.${MODE}.*.csv; do
+#  NG=$(grep -c $ $res)
+#  echo "  ${res}: $NG genomes"
+#  FA=${res%.csv}.fa
+#  ${TARDIS_HOME}/bin/extractSeqs.py $INDIR/$AFILE $res > $FA
+#  FASTAS="$FASTAS $FA"
+#done
+#${TARDIS_HOME}/bin/extractSeqs.py $OUTDIR $INDIR/$AFILE $NGENS
+
 echo
 
 if [ "$DEBUG" != "y" ];

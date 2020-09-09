@@ -4,6 +4,21 @@
 library(doRNG)
 library(optparse)
 
+read.distance.matrix = function(dist.file){
+  
+  if(grepl("\\.rds$", dist.file) | grepl("\\.RDS$", dist.file)){
+    dist.m = readRDS(dist.file)
+  }else{
+    dist.m = scan(opt$distance, sep = ',', what=character())
+    dist.m = matrix(dist.m, nrow=dim(metadata)[1]+1)
+    genome.names <- dist.m[1,2:dim(dist.m)[1]]
+    dist.m = apply((dist.m[2:dim(dist.m)[1],2:dim(dist.m)[1]]), 1, as.numeric)
+    colnames(dist.m) <- rownames(dist.m) <- genome.names
+  }
+  
+  return(dist.m)
+}
+
 option_list = list(
   make_option(c("--shiny"), type="logical", default="FALSE", 
               help="command line or shiny"),
@@ -45,12 +60,6 @@ option_list = list(
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
-
-if(!opt$shiny){
-  source('bin/read.distance.matrix.R')
-}else{
-  source('../bin/read.distance.matrix.R')
-}
 
 seeds = as.numeric(readLines(opt$seeds))
 metadata = read.table(opt$metadata, sep = ',', stringsAsFactors = FALSE, header = TRUE)
