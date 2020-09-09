@@ -223,18 +223,17 @@ output$running <- eventReactive(input$Run, {
                          "--n.subsamples", input$n.subsamples,
                          "--generations", input$n.gen,
                          "--metadata", metadata()
-                          )
-                    )
+                         )
+                   )
             message("Reports and results printed")
             for(k in 1:input$n.subsamples) {
               out.file = paste("output/subsample.GA", k, sep = '.')
               system(paste("python3 ../bin/extractSeqs.py",
-                            gen.file(),
-                            paste(out.file, "csv", sep = '.'),
-                            ">",
-                            paste(out.file, "fa", sep = '.')
-                            )
-                     ) 
+                           gen.file(),
+                           paste(out.file, "csv", sep = '.'),
+                           ">", paste(out.file, "fa", sep = '.')
+                           )
+                     )
               }
           return("Done")
           }else{

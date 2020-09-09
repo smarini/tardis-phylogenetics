@@ -29,6 +29,7 @@ opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 
 if(!opt$shiny){
+  source('bin/read.distance.matrix.R')
   config <- read.table(paste(opt$data.set, 'config', sep='.'), header=FALSE, sep="=", row.names=1, strip.white=TRUE, na.strings="NA", stringsAsFactors=FALSE)
   config <- structure(as.character(config[,1]), names = rownames(config))
   config.default = setNames(c(5,1,3),
@@ -40,6 +41,7 @@ if(!opt$shiny){
   gen = as.numeric(config['params.ngenerations'])
   n.subsamples = config['params.n.subsamples']
 }else{
+  source('../bin/read.distance.matrix.R')
   batches = opt$tot.batches
   gen = opt$generations
   n.subsamples= opt$n.subsamples
@@ -78,6 +80,19 @@ for (i in 1:batches){
   indeces = rbind(indeces, tmp_ind)
   }
   
+names(fitnesses) = as.character(1:length(fitnesses))
+selected.individuals = sort(fitnesses, decreasing = TRUE)[1:n.subsamples]
+
+for (i in 1:n.subsamples){
+  selected.genomes = colnames(dist.m)[indeces[as.numeric(names(selected.individuals[i])),]]
+  if (!opt$shiny){
+    out.file = paste0('output/', opt$data.set, '/subsample.GA.', i, '.csv')
+  }else{
+    out.file = paste0('output/subsample.GA.', i, '.csv')
+  }
+  writeLines( selected.genomes, out.file )
+}
+
 df.to.plot = data.frame(generation=numeric(), value=numeric(), group=character(), stringsAsFactors = FALSE)
 
 for(g in 1:gen-1){
