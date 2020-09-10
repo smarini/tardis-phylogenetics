@@ -219,7 +219,7 @@ output$running <- eventReactive(input$Run, {
             system(paste("Rscript ../bin/print.results.R",
                          "--shiny TRUE",
                          "--distance", distance(),
-                         "--tot.batches 1",
+                         "--n.batches 1",
                          "--n.subsamples", input$n.subsamples,
                          "--generations", input$n.gen,
                          "--metadata", metadata()

@@ -17,7 +17,7 @@ option_list = list(
               help="number of generations"),
   make_option(c("--n.subsamples"), type="numeric", default=3, 
               help="number of top ranking subsampling solutions to consider as output"),
-  make_option(c("--nbatches"), type="numeric", default=1, 
+  make_option(c("--n.batches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
   make_option(c("--metadata"), type="character", default='metadata.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format"),
@@ -34,13 +34,13 @@ if(!opt$shiny){
   config.default = setNames(c(5,1,3),
                             c("params.nbatches",
                               "params.ngenerations",
-                              "params.n.subsamples"))
+                              "params.nsubsamples"))
   config = c(config, config.default[!config.default %in% config])
   batches = config['params.nbatches']
   gen = as.numeric(config['params.ngenerations'])
-  n.subsamples = config['params.n.subsamples']
+  n.subsamples = config['params.nsubsamples']
 }else{
-  batches = opt$nbatches
+  batches = opt$n.batches
   gen = opt$generations
   n.subsamples= opt$n.subsamples
 }
@@ -129,4 +129,10 @@ p.tem.spr <- ggplot(df.to.plot[df.to.plot$group %in% c('mean temporal spread', '
   ylab('temporal distribution') +
   theme(legend.position = 'bottom', legend.title = element_blank())
 
-ggsave(filename='output/per.gen.stats.png', plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)
+if (!opt$shiny){
+      out.file = paste('output', opt$data.set, 'per.gen.stats.png', sep = '/')
+    }else{
+      out.file = 'output/per.gen.stats.png'
+    }
+
+ggsave(filename=out.file, plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)

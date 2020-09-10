@@ -12,8 +12,8 @@ Download TARDiS and make sure [dependencies](#Dependendencies-and-OS) are instal
 To run TARDiS, you will need the following inputs:
 
 * A genomic data set in fasta format (example: `data/example/aln.fa`)
-* A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files.
-* A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example in `data/example/metadata.csv`)
+* A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example: `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files.
+* A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example: `data/example/metadata.csv`)
 
 ### Shiny GUI
 For experimenting with TARDiS, you can run the Shiny app in `shiny_local`, your results will be in `shiny_local/output`. You can retrieve example data in `data/example`.
@@ -43,6 +43,7 @@ TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sa
 ## Dependendencies and OS
 To run local/hpc command line TARDiS, please install
 * [R >= 3.6.1](https://www.r-project.org/)
+* [Pyhton >= 3.7 (works with 2.7 as well)](https://www.python.org/)
 * [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)
 * [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 * [optparse >= 1.6.6](https://cran.r-project.org/web/packages/optparse/index.html)
