@@ -20,9 +20,7 @@ read.distance.matrix = function(dist.file){
 }
 
 option_list = list(
-  make_option(c("--shiny"), type="logical", default="FALSE", 
-              help="command line or shiny"),
-  make_option(c("--data.set"), type="character", default="example", 
+  make_option(c("--data.set"), type="character", default="example.dataset", 
               help="dataset name"),
   make_option(c("--distance"), type="character", default='data/example/jc.distance.precalc.csv', 
               help="genome distance matrix file, should be a csv"),
@@ -55,7 +53,9 @@ option_list = list(
   make_option(c("--dist.opt"), type="character", default="max", 
               help="Genetic distance optimized towards its max, mean, or median point"),
   make_option(c("--seeds"), type="character", default="data/seeds.txt", 
-              help="file with a seeds per line/generation")
+              help="file with a seeds per line/generation"),
+  make_option(c("--out.dir"), type="character", default=getwd(), 
+              help="output directory")
               )
 
 opt_parser = OptionParser(option_list=option_list);
@@ -103,13 +103,8 @@ if (opt$frac.evo > 0 | opt$frac.eli > 0 | opt$generation > 0){
   old.gen.fit = NULL
   old.gen.indeces = NULL
   for(i in 1:opt$tot.batches){
-    if(!opt$shiny) {
-      tmp = as.matrix(read.csv(paste0(opt$basedir, '/output/', opt$data.set, '/GA.', opt$data.set, '.', opt$generation-1, '.', i, '.indeces.fitness.csv'), sep = ','))[1,]
-      old.gen.indeces = rbind(old.gen.indeces, as.matrix(read.table(paste0(opt$basedir, '/output/', opt$data.set, '/GA.', opt$data.set,  '.',  opt$generation-1, '.', i, '.indeces.subsamples.csv'), sep = ',')) )
-    }else{
-      tmp = as.matrix(read.csv(paste0('output/GA.', opt$generation-1, '.', i, '.indeces.fitness.csv'), sep = ','))[1,]
-      old.gen.indeces = rbind(old.gen.indeces, as.matrix(read.table(paste0('output/GA.', opt$generation-1, '.', i, '.indeces.subsamples.csv'), sep = ',')) )
-      }
+    tmp = as.matrix(read.csv(paste0(opt$out.dir, '/GA.', opt$data.set, '.', opt$generation-1, '.', i, '.indeces.fitness.csv'), sep = ','))[1,]
+    old.gen.indeces = rbind(old.gen.indeces, as.matrix(read.table(paste0(opt$out.dir, '/GA.', opt$data.set,  '.',  opt$generation-1, '.', i, '.indeces.subsamples.csv'), sep = ',')) )
   }
   old.gen.fit = c(old.gen.fit, tmp)
   names(old.gen.fit) = as.numeric(1:length(old.gen.fit))
@@ -197,11 +192,8 @@ message('all fitnesses calculated')
   
 fitnesses = unlist(output)
 # write output
-if(!opt$shiny) {
-  out.file = paste0(opt$basedir, '/output/', opt$data.set, '/GA.', opt$data.set, '.',  opt$generation, '.', opt$batch)
-}else{
-  out.file = paste0('output/GA.', opt$generation, '.', opt$batch)
-}
+out.file = paste0(opt$out.dir, '/GA.', opt$data.set, '.',  opt$generation, '.', opt$batch)
+
 write.table(matrix(fitnesses, nrow = 4),
             file = paste(out.file, 'indeces.fitness.csv', sep = '.'),
             quote = FALSE, col.names = FALSE, row.names = FALSE, sep = ',') 

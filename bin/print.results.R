@@ -7,43 +7,24 @@ library(gridExtra)
 args = commandArgs(trailingOnly=TRUE)
 
 option_list = list(
-  make_option(c("--shiny"), type="logical", default="FALSE", 
-              help="R shiny or NextFlow"),
-  make_option(c("-s", "--data.set"), type="character", default="Norway", 
+  make_option(c("-s", "--data.set"), type="character", default="example.dataset", 
               help="dataset name"),
   make_option(c("-d", "--distance"), type="character", default='jc.distance.precalc.csv', 
               help="genome distance matrix file name, should be an csv"),
   make_option(c("--generations"), type="numeric", default=10, 
               help="number of generations"),
-  make_option(c("--n.subsamples"), type="numeric", default=3, 
-              help="number of top ranking subsampling solutions to consider as output"),
   make_option(c("--n.batches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
   make_option(c("--metadata"), type="character", default='metadata.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format"),
-  make_option(c("--dist.opt"), type="character", default="highest", 
-              help="Genetic distance optimized towards its highest/average point")
+  make_option(c("--dist.opt"), type="character", default="max", 
+              help="Genetic distance optimized towards its highest/average point"),
+  make_option(c("--out.dir"), type="character", default=getwd(), 
+              help="output directory")
               )
 
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
-
-if(!opt$shiny){
-  config <- read.table(paste(opt$data.set, 'config', sep='.'), header=FALSE, sep="=", row.names=1, strip.white=TRUE, na.strings="NA", stringsAsFactors=FALSE)
-  config <- structure(as.character(config[,1]), names = rownames(config))
-  config.default = setNames(c(5,1,3),
-                            c("params.nbatches",
-                              "params.ngenerations",
-                              "params.nsubsamples"))
-  config = c(config, config.default[!config.default %in% config])
-  batches = config['params.nbatches']
-  gen = as.numeric(config['params.ngenerations'])
-  n.subsamples = config['params.nsubsamples']
-}else{
-  batches = opt$n.batches
-  gen = opt$generations
-  n.subsamples= opt$n.subsamples
-}
 
 metadata = read.table(opt$metadata, sep = ',', stringsAsFactors = FALSE, header = TRUE)
 
@@ -64,31 +45,13 @@ sd.d = sd(dist.m)
 fitnesses = NULL
 indeces = NULL
 
-for (i in 1:batches){
-  if (!opt$shiny){
-    in.file = paste0('output/', opt$data.set, '/GA.', opt$data.set, '.', gen-1, '.', i)
-    }else{
-      in.file = paste0('output/GA.', gen-1, '.', i)
-      }
-  
-  tmp_fit = as.matrix(read.csv(paste(in.file, 'indeces.fitness.csv', sep = '.'), sep = ','))[2,]
-  fitnesses = c(fitnesses, tmp_fit)
-    
-  tmp_ind = as.matrix(read.csv(paste(in.file, 'indeces.subsamples.csv', sep = '.'), sep = ',', stringsAsFactors = FALSE, header = FALSE))
-  indeces = rbind(indeces, tmp_ind)
-  }
-  
 df.to.plot = data.frame(generation=numeric(), value=numeric(), group=character(), stringsAsFactors = FALSE)
 
-for(g in 1:gen-1){
+for(g in 1:opt$generations-1){
   gen.output = NULL
-  for (i in 1:batches){
-    if (!opt$shiny){
-      in.file = paste0('output/', opt$data.set, '/GA.', opt$data.set, '.', g, '.', i)
-    }else{
-      in.file = paste0('output/GA.', g, '.', i)
-    }
-    
+  for (i in 1:opt$n.batches){
+    in.file = paste0(opt$out.dir, '/GA.', opt$data.set, '.', g, '.', i)
+
     tmp = as.matrix(read.csv(paste(in.file, 'indeces.fitness.csv', sep = '.'), sep = ','))
     gen.output = cbind(gen.output, tmp)
     }
@@ -97,14 +60,8 @@ for(g in 1:gen-1){
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[2,]), group='mean genetic diversity')
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[3,]), group='mean temporal spread')
   }
-
-if (!opt$shiny){
-      out.file = paste('output', opt$data.set, sep = '/')
-    }else{
-      out.file = 'output/'
-    }
-
-write.csv(df.to.plot, paste(out.file, 'per.gen.stats.csv', sep = '/'), quote = FALSE, row.names = FALSE)
+out.file = paste0(opt$out.dir, '/', opt$data.set, '.per.gen.stats')
+write.csv(df.to.plot, paste(out.file, 'csv', sep = '.'), quote = FALSE, row.names = FALSE)
 
 p.fit <- ggplot(df.to.plot[df.to.plot$group %in% c('mean fitness', 'best fitness'),], aes(x=generation, y=value, colour=group)) + 
   geom_line() +
@@ -136,4 +93,4 @@ p.tem.spr <- ggplot(df.to.plot[df.to.plot$group %in% c('mean temporal spread', '
   ylab('temporal distribution') +
   theme(legend.position = 'bottom', legend.title = element_blank())
 
-ggsave(filename=paste(out.file, 'per.gen.stats.png', sep = '/'), plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)
+ggsave(filename=paste(out.file, 'png', sep = '.'), plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)

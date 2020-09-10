@@ -4,8 +4,9 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 ## Quick start
 Download TARDiS and make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example:
 
-1. Run `[path/to/tardis]/tardis example`
-2. Profit! You results are in `[current/directory]/output/example`
+`[path/to/tardis]/tardis -g`
+
+and the TARDiS explorer GUI will open in your default browser. Retrieve example data in `data/example` and click on `Run Tardis`.
 
 ### Input
 To run TARDiS, you will need the following inputs:
@@ -15,15 +16,19 @@ To run TARDiS, you will need the following inputs:
 * A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example: `data/example/metadata.csv`)
 
 ### Shiny GUI
-For experimenting with TARDiS, you can run the Shiny app in `shiny_local/app.R` from your console, or from command line (`Rscript -e 'shiny::runApp("[path/to/tardis]/shiny_local/app.R", launch.browser = TRUE)'`).
-Your results will be in `shiny_local/output`. You can retrieve example data in `data/example`.
+For experimenting with TARDiS, you can run the Shiny app as explained [above](#Quick-start). You can retrieve example data in `data/example`.
 
 ![Shiny GUI](/shiny_local/gui.png)
 
 Important: **this GUI is intended for experimenting with small sets**, and small GA populations. All the GUI outputs are stored as `shiny_local/output/jc.distance.precalc.rds`. If you don't have a distance file, the `Jukes-Cantor distance` calculates the genomic distance. This distance files is to used as part of the TARDiS input. For large data sets, please use the command line instead. 
 
 ### Local command line ([Nextflow](https://www.nextflow.io/))
-On a single machine, you can run TARDiS as explained above. Depending on your resources, if you are considering a large solution population, you can use more than one batch, i.e, each GA generation will be processed in batches. Parameters can be specified by command line (see `tardis --help`), or by a configuration file, named after your data set (example `example.config`).
+On a single machine, you can run TARDiS as
+
+1. Run `[path/to/tardis]/tardis example`
+2. Profit! You results are in `[current/directory]/output/example`
+
+Depending on your resources, if you are considering a large solution population, you can use more than one batch, i.e, each GA generation will be processed in batches. Parameters can be specified by command line (see `tardis --help`), or by a configuration file, named after your data set (example `example.config`).
 
 ### hpc Command line ([Nextflow](https://www.nextflow.io/))
 Particularly large data sets can be run on hpc. To do so, you need generate an a nextflow configuration file for the specific workload manager in use. We provide an example file for SLURM in `hpc.nextflow.config`.
@@ -53,6 +58,7 @@ To run TARDiS, please install
 
 For the GUI/explorer version, please install
 * [Shiny >= 1.4.0.2](https://www.r-project.org/nosvn/pandoc/shiny.html)
+* [directoryInput >= 137dc69](https://github.com/wleepang/shiny-directory-input)
 
 For the local/hpc command line version, please install
 * [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)

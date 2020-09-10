@@ -1,4 +1,6 @@
 library(shiny)
+library(shinyDirectoryInput)
+
 options(shiny.maxRequestSize = 100*1024^2) # Max 100MB per file
 
 ui <- fluidPage(
@@ -72,6 +74,14 @@ ui <- fluidPage(
     ),
 
   fluidRow(  
+    column( 4, offset = 1,
+            textInput("data.set", "Dataset name", value = "example.dataset", width = NULL)
+            ),
+    column( 4, offset = 1,
+            directoryInput('out.dir', label = 'Select output directory', value = getwd()) )
+  ),
+  
+  fluidRow(  
     column( 9, offset = 1,
             textOutput("to_run") )
     ),
@@ -103,11 +113,27 @@ ui <- fluidPage(
   
 server <- function(input, output, session) {
 
+  observeEvent(
+    ignoreNULL = TRUE,
+    eventExpr = {
+      input$out.dir
+    },
+    handlerExpr = {
+      if (input$out.dir > 0) {
+        path = choose.dir(default = readDirectoryInput(session, 'out.dir'))
+        
+        # update the widget value
+        updateDirectoryInput(session, 'out.dir', value = path)
+        }
+    }
+  )
+    
   output$to_run <- renderText({ paste("Tardis will run on", input$tot.gen.size,
                                       "individuals per generation, handled by", input$n.cores,
                                       "core(s), for", input$n.gen,
                                       "generations, counted as 0 to", (input$n.gen-1), "\n"
-                                      ) })
+                                      )
+  })
   
   output$search_space <- reactive({ 
     metadata <- input$metadata$datapath
@@ -127,7 +153,7 @@ server <- function(input, output, session) {
   
   distance <- eventReactive(input$Run, {
     return(input$distance$datapath)
-    })
+  })
   
   gen.file <- eventReactive(list(input$Run, input$JC), {
     return(input$gen.file$datapath)
@@ -137,43 +163,51 @@ server <- function(input, output, session) {
     return(input$metadata$datapath)
   })
 
-output$JC <- eventReactive(input$JC, {
-  condition = !is.null(input$gen.file$datapath)
+  data.set <- eventReactive(input$Run, {
+    return(input$data.set)
+  })
   
-  if(condition){
-    out.file = "output/jc.distance.precalc.rds"
-    JC.command = paste("Rscript ../bin/JC.pairwise.dist.R",
-                       "-i", gen.file(),
-                       "-c", input$n.cores,
-                       "-d ", out.file)
-    message(JC.command)
-    system(JC.command)
-    if(file.exists(out.file)){
-      return(paste("Jukes-Cantor distance calculated and saved in", out.file))
+  output.directory <- eventReactive(list(input$Run, input$JC), {
+    return(readDirectoryInput(session, 'out.dir'))
+  })
+  
+  output$JC <- eventReactive(input$JC, {
+    condition = !is.null(input$gen.file$datapath)
+    
+    if(condition){
+      out.file = paste(output.directory(), "jc.distance.precalc.rds", sep = '/')
+      JC.command = paste("Rscript ../bin/JC.pairwise.dist.R",
+                         "-i", gen.file(),
+                         "-c", input$n.cores,
+                         "-d ", out.file)
+      message(JC.command)
+      system(JC.command)
+      if(file.exists(out.file)){
+        return(paste("Jukes-Cantor distance calculated and saved in", out.file))
+        }else{
+          return("Error in processing alignment file.")
+        }
       }else{
-        return("Error in processing alignment file.")
+        return("Please load the sequence aligned fasta file to calculate the Jukes-Cantor distance.")
       }
-    }else{
-      return("Please load the sequence aligned fasta file to calculate the Jukes-Cantor distance.")
-    }
   })
 
-output$running <- eventReactive(input$Run, {
-  
+  output$running <- eventReactive(input$Run, {
+    
     conditions = (round(input$frac.new*input$gen.size) +
                     round(input$frac.evo*input$gen.size) +
                     round(input$frac.eli*input$gen.size)) == input$gen.size &
-                    !is.null(input$metadata$datapath) &
-                    !is.null(input$distance$datapath) &
-                    !is.null(input$gen.file$datapath)
+                    !is.null(metadata()) &
+                    !is.null(distance()) &
+                    !is.null(gen.file()) &
+                    !is.null(output.directory())
 
-    
     if(conditions){
       withProgress(message = 'Executing Tardis...', detail = "Running the GA", value = 0, {
   
         incProgress(0, detail = paste("Initializing gen 0"))
         # init
-        GA.command = paste("Rscript ../bin/make.gen.R --shiny TRUE",
+        GA.command = paste("Rscript ../bin/make.gen.R",
                            "--distance", distance(),
                            "--metadata", metadata(),
                            "--gen.size", input$gen.size,
@@ -184,64 +218,67 @@ output$running <- eventReactive(input$Run, {
                            "--w.tem", input$w.tem,
                            "--w.div", input$w.div,
                            "--seeds", "../data/seeds.txt",
+                           "--out.dir", output.directory(),
+                           "--data.set", data.set(),
                            "--generation 0 --frac.new 1 --frac.evo 0 --frac.eli 0")
         message(GA.command)
         system(GA.command)
         message('Init over')
         for (i in 1:(input$n.gen-1)) {
-          
           incProgress(1/(input$n.gen-1), detail = paste("Working on gen", i))
           
           message(i)
           
-          GA.command = paste("Rscript ../bin/make.gen.R --shiny TRUE",
+          GA.command = paste("Rscript ../bin/make.gen.R",
                              "--distance", distance(),
                              "--metadata", metadata(),
                              "--generation", i,
                              "--frac.new", input$frac.new,
                              "--frac.evo", input$frac.evo,
                              "--frac.eli", input$frac.eli,
-                             "--gen.size", input$tot.gen.size,
+                             "--gen.size", input$gen.size,
                              "--n.samples", input$n.samples,
                              "--n.cores", input$n.cores,
                              "--basedir", '../',
                              "--w.tem", input$w.tem,
                              "--w.div", input$w.div,
                              "--seeds", "../data/seeds.txt",
+                             "--out.dir", output.directory(),
+                             "--data.set", data.set(),
                              "--dist.opt", input$dist.opt)
           message(GA.command)
           system(GA.command)
-          }
+        }
+        
         message('Reading results')
-        if(all(file.exists(paste("output/GA", (input$n.gen-1), "1.indeces.fitness.csv", sep = '.'  )),
-               file.exists(paste("output/GA", (input$n.gen-1), "1.indeces.subsamples.csv", sep = '.'  ))
+        if(all(file.exists(paste0(output.directory(), "/GA.", data.set(), ".", 0:(input$n.gen-1), ".1.indeces.fitness.csv")),
+               file.exists(paste0(output.directory(), "/GA.", data.set(), ".", 0:(input$n.gen-1), ".1.indeces.subsamples.csv"))
                )){
           
-            system(paste("Rscript ../bin/print.results.R",
-                         "--shiny TRUE",
-                         "--distance", distance(),
-                         "--n.batches 1",
-                         "--n.subsamples", input$n.subsamples,
-                         "--generations", input$n.gen,
-                         "--metadata", metadata()
-                         )
-                   )
-            message("Reports and results printed")
-            for(k in 1:input$n.subsamples) {
-              out.file = paste("output/subsample.GA", k, sep = '.')
-              system(paste("python3 ../bin/extractSeqs.py",
-                           gen.file(),
-                           paste(out.file, "csv", sep = '.'),
-                           ">", paste(out.file, "fa", sep = '.')
-                           )
-                     )
-              }
+          system(paste("Rscript ../bin/print.results.R",
+                       "--distance", distance(),
+                       "--n.batches 1",
+                       "--generations", input$n.gen,
+                       "--out.dir", output.directory(),
+                       "--data.set", data.set(),
+                       "--data.set", data.set(),
+                       "--metadata", metadata()
+                         ) )
+          message("Reports and results printed")
+          for(k in 1:input$n.subsamples) {
+            out.file = paste("output/subsample.GA", k, sep = '.')
+            system(paste("python3 ../bin/extractSeqs.py",
+                         gen.file(),
+                         paste(out.file, "csv", sep = '.'),
+                         ">", paste(out.file, "fa", sep = '.')) )
+          }
           return("Done")
-          }else{
-            return("Error processing data. Please check input file format and parameter choice.")
-            }
-          })
-      }else{
+        }else{
+          return("Error processing data. Please check input file format and parameter choice.")
+        }
+      })
+      
+    }else{
       return(paste('Wrong intial conditions. Distance, sequence, and metadata files should all be selected.',
                    'Fractions of random, evolved, and elite generated individuals currently sum to',
                    (input$frac.new + input$frac.evo + input$frac.eli), '(should sum to 1).\n', 
@@ -251,9 +288,8 @@ output$running <- eventReactive(input$Run, {
                       round(input$frac.eli*input$tot.gen.size)),
                    paste0('(should sum to ', input$tot.gen.size, ').')
                    ))
-      } 
+    }
   })
-  
-  }
+}
 
 shinyApp(ui, server)
