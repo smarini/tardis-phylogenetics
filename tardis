@@ -90,7 +90,7 @@ done
 if [ "$SHINY" == "Y" ];
 then
   echo "Starting Shiny interface, use Ctrl-c to quit."
-  Rscript -e 'shiny::runApp("${TARDIS_HOME}/shiny_local/app.R", launch.browser = TRUE)'
+  Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
   exit
 fi
 
