@@ -97,7 +97,14 @@ for(g in 1:gen-1){
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[2,]), group='mean genetic diversity')
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[3,]), group='mean temporal spread')
   }
-write.csv(df.to.plot, 'output/per.gen.stats.csv', quote = FALSE, row.names = FALSE)
+
+if (!opt$shiny){
+      out.file = paste('output', opt$data.set, sep = '/')
+    }else{
+      out.file = 'output/'
+    }
+
+write.csv(df.to.plot, paste(out.file, 'per.gen.stats.csv', sep = '/'), quote = FALSE, row.names = FALSE)
 
 p.fit <- ggplot(df.to.plot[df.to.plot$group %in% c('mean fitness', 'best fitness'),], aes(x=generation, y=value, colour=group)) + 
   geom_line() +
@@ -129,10 +136,4 @@ p.tem.spr <- ggplot(df.to.plot[df.to.plot$group %in% c('mean temporal spread', '
   ylab('temporal distribution') +
   theme(legend.position = 'bottom', legend.title = element_blank())
 
-if (!opt$shiny){
-      out.file = paste('output', opt$data.set, 'per.gen.stats.png', sep = '/')
-    }else{
-      out.file = 'output/per.gen.stats.png'
-    }
-
-ggsave(filename=out.file, plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)
+ggsave(filename=paste(out.file, 'per.gen.stats.png', sep = '/'), plot=do.call("grid.arrange", c(list(p.fit, p.gen.div, p.tem.spr), ncol=3)), width=30, height=8, units = "cm", dpi = 600)
