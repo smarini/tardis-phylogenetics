@@ -4,9 +4,8 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 ## Quick start
 Download TARDiS and make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example:
 
-1. Run `nextflow [path to tardis-phylogenetics]/tardis example`
-2. Profit! You results are in `[path to tardis-phylogenetics]/output/example`
-
+1. Run `[path/to/tardis]/tardis example`
+2. Profit! You results are in `[current/directory]/output/example`
 
 ### Input
 To run TARDiS, you will need the following inputs:
@@ -38,7 +37,8 @@ defines the number of batches. So to have 500K population split into 50 batches 
 Run `tardis --help` to check out all the running options. Note that for reproducibility of the results, the user can specify the seeds to be used in `data/seeds.txt`.
 
 ## Yes but what TARDiS do exactly?
-TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users. For a detailed discussion please be patient, a preprint will be out soon.
+TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users.
+For a detailed discussion please be patient, a preprint and/or a user manual will be out soon.
 
 ## Dependendencies and OS
 To run TARDiS, please install
