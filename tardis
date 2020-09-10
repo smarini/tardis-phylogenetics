@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARDIS_HOME=$(dirname $0)
+TARDIS_HOME=$(dirname $(readlink -nf $0))
 
 NGENS=10
 AFILE="aln.fa"
@@ -9,6 +9,7 @@ MFILE="metadata.csv"
 MODE="GA"
 DEBUG=""
 CONFS=""
+SHINY="N"
 
 # Colors are fun...
 B='\033[1;34m'
@@ -28,6 +29,7 @@ usage() {
     echo
     echo "Options:"
     echo
+    echo " -g       | Enable Shiny GUI (all other options ignored)"
     echo " -b       | Enable brute-force method (default: GA method)"
     echo " -n NGENS | Set number of generations for GA (defaut: $NGENS)"
     echo " -a AFILE | Name of alignment file (default: $AFILE)"
@@ -38,8 +40,11 @@ usage() {
     echo
 }
 
-while getopts ":n:a:d:m:xbhv" opt; do
+while getopts ":n:a:d:m:xgbhv" opt; do
     case ${opt} in
+	g )
+	    SHINY="Y"
+	    ;;
 	n ) 
 	    NGENS=$OPTARG
 	    ;;
@@ -81,6 +86,14 @@ while getopts ":n:a:d:m:xbhv" opt; do
 	    ;;
     esac
 done
+
+if [ "$SHINY" == "1" ];
+then
+  echo "Starting Shiny interface, use Ctrl-c to quit."
+  Rscript -e 'shiny::runApp("${TARDIS_HOME}/shiny_local/app.R", launch.browser = TRUE)')
+  exit
+fi
+
 shift $((OPTIND - 1))
 DATASET=$1
 if [ "$DATASET" == "" ];
