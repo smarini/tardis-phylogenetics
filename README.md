@@ -4,9 +4,8 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 ## Quick start
 Download TARDiS and make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example:
 
-1. Run `nextflow [path to tardis-phylogenetics]/tardis example`
-2. Profit! You results are in `[path to tardis-phylogenetics]/output/example`
-
+1. Run `[path/to/tardis]/tardis example`
+2. Profit! You results are in `[current/directory]/output/example`
 
 ### Input
 To run TARDiS, you will need the following inputs:
@@ -16,7 +15,8 @@ To run TARDiS, you will need the following inputs:
 * A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example: `data/example/metadata.csv`)
 
 ### Shiny GUI
-For experimenting with TARDiS, you can run the Shiny app in `shiny_local`, your results will be in `shiny_local/output`. You can retrieve example data in `data/example`.
+For experimenting with TARDiS, you can run the Shiny app in `shiny_local/app.R` from your console, or from command line (`Rscript -e 'shiny::runApp("[path/to/tardis]/shiny_local/app.R", launch.browser = TRUE)'`).
+Your results will be in `shiny_local/output`. You can retrieve example data in `data/example`.
 
 ![Shiny GUI](/shiny_local/gui.png)
 
@@ -33,12 +33,12 @@ To ease the calculation burden for large data sets, data can be split into batch
 defines the number of batches. So to have 500K population split into 50 batches of 10K individuals each, you can set `params.gensize = 10000`, and `params.nbatches = 50`. Note that this will submit to your workload manager
 50 jobs (1 per batch) for each generation. When all the jobs in the first genration are  complete, the 50 batches for the new generation will be submitted, and so on.
 
-
 ### Options
 Run `tardis --help` to check out all the running options. Note that for reproducibility of the results, the user can specify the seeds to be used in `data/seeds.txt`.
 
 ## Yes but what TARDiS do exactly?
-TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users. For a detailed discussion please be patient, a preprint will be out soon.
+TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users.
+For a detailed discussion please be patient, a preprint and/or a user manual will be out soon.
 
 ## Dependendencies and OS
 To run TARDiS, please install
