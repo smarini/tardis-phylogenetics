@@ -30,7 +30,7 @@ usage() {
     echo "Options:"
     echo
     echo " -g       | Enable Shiny GUI (all other options ignored)"
-    echo " -b       | Enable brute-force method (default: GA method)"
+#    echo " -b       | Enable brute-force method (default: GA method)"
     echo " -n NGENS | Set number of generations for GA (defaut: $NGENS)"
     echo " -a AFILE | Name of alignment file (default: $AFILE)"
     echo " -d DFILE | Name of distances file (default: $DFILE)"
@@ -87,10 +87,10 @@ while getopts ":n:a:d:m:xgbhv" opt; do
     esac
 done
 
-if [ "$SHINY" == "1" ];
+if [ "$SHINY" == "Y" ];
 then
   echo "Starting Shiny interface, use Ctrl-c to quit."
-  Rscript -e 'shiny::runApp("${TARDIS_HOME}/shiny_local/app.R", launch.browser = TRUE)')
+  Rscript -e 'shiny::runApp("${TARDIS_HOME}/shiny_local/app.R", launch.browser = TRUE)'
   exit
 fi
 
