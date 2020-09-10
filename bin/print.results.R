@@ -17,7 +17,7 @@ option_list = list(
               help="number of generations"),
   make_option(c("--n.subsamples"), type="numeric", default=3, 
               help="number of top ranking subsampling solutions to consider as output"),
-  make_option(c("--tot.batches"), type="numeric", default=1, 
+  make_option(c("--nbatches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
   make_option(c("--metadata"), type="character", default='metadata.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format"),
@@ -32,15 +32,15 @@ if(!opt$shiny){
   config <- read.table(paste(opt$data.set, 'config', sep='.'), header=FALSE, sep="=", row.names=1, strip.white=TRUE, na.strings="NA", stringsAsFactors=FALSE)
   config <- structure(as.character(config[,1]), names = rownames(config))
   config.default = setNames(c(5,1,3),
-                            c("params.tot.batches",
+                            c("params.nbatches",
                               "params.ngenerations",
                               "params.n.subsamples"))
   config = c(config, config.default[!config.default %in% config])
-  batches = config['params.tot.batches']
+  batches = config['params.nbatches']
   gen = as.numeric(config['params.ngenerations'])
   n.subsamples = config['params.n.subsamples']
 }else{
-  batches = opt$tot.batches
+  batches = opt$nbatches
   gen = opt$generations
   n.subsamples= opt$n.subsamples
 }

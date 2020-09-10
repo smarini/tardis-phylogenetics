@@ -140,7 +140,7 @@ else
   echo "*** Executing GA method..."
   nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data.set $DATASET --distances $INDIR/$DFILE \
                --metadata $INDIR/$MFILE --ngenerations $NGENS --outdir $OUTDIR --afile $INDIR/$AFILE
-  Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE
+  Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE
   echo "*** GA done."
   echo
 fi
