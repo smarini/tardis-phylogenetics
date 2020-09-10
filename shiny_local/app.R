@@ -160,12 +160,13 @@ output$JC <- eventReactive(input$JC, {
 
 output$running <- eventReactive(input$Run, {
   
-    conditions = (round(input$frac.new*input$tot.gen.size) +
-                    round(input$frac.evo*input$tot.gen.size) +
-                    round(input$frac.eli*input$tot.gen.size)) == input$tot.gen.size &
+    conditions = (round(input$frac.new*input$gen.size) +
+                    round(input$frac.evo*input$gen.size) +
+                    round(input$frac.eli*input$gen.size)) == input$gen.size &
                     !is.null(input$metadata$datapath) &
                     !is.null(input$distance$datapath) &
                     !is.null(input$gen.file$datapath)
+
     
     if(conditions){
       withProgress(message = 'Executing Tardis...', detail = "Running the GA", value = 0, {

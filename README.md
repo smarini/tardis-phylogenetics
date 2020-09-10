@@ -43,7 +43,7 @@ For a detailed discussion please be patient, a preprint and/or a user manual wil
 ## Dependendencies and OS
 To run TARDiS, please install
 * [R >= 3.6.1](https://www.r-project.org/)
-* [Pyhton >= 3.7 (works with 2.7 as well)](https://www.python.org/)
+* [Pyhton >= 3.7](https://www.python.org/) (works with Pyhton 2.7 as well)
 * [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 * [optparse >= 1.6.6](https://cran.r-project.org/web/packages/optparse/index.html)
 * [doRNG >= 1.8.2](https://cran.r-project.org/web/packages/doRNG/index.html)
@@ -52,7 +52,7 @@ To run TARDiS, please install
 * [gridExtra >= 2.3](https://cran.r-project.org/web/packages/gridExtra/index.html)
 
 For the GUI/explorer version, please install
-* [Shiny >= 1.4.0.2](https://www.r-project.org/nosvn/pandoc/shiny.html) is needed for the GUI explorer.
+* [Shiny >= 1.4.0.2](https://www.r-project.org/nosvn/pandoc/shiny.html)
 
 For the local/hpc command line version, please install
 * [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)
