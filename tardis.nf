@@ -114,7 +114,8 @@ process DoIt {
 	  --basedir ${workflow.launchDir} \
           --seeds ${workflow.launchDir}/${params.seeds} \
 	  --distance ${workflow.launchDir}/${params.distances} \
-	  --metadata ${workflow.launchDir}/${params.metadata}
+	  --metadata ${workflow.launchDir}/${params.metadata} \
+	  --out.dir ${workflow.launchDir}/${params.outdir}
 	"""
 }
 
