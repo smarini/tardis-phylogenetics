@@ -45,9 +45,9 @@ ui <- fluidPage(
            verbatimTextOutput("n.gen") ),
     
     column( 3, offset = 0,
-           numericInput("w.div", "Genomic diversity weigth", 0.5, min = 0, max = 1, step = 0.01),
+           numericInput("w.div", "Genomic diversity weight", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_div"),  
-           numericInput("w.tem", "Temporal diversity weigth:", 0.5, min = 0, max = 1, step = 0.01),
+           numericInput("w.tem", "Temporal diversity weight:", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_tem"),
            selectInput("dist.opt", "Optimize genetic diversity",
                        c("Max diversity" = "max",
@@ -260,7 +260,6 @@ server <- function(input, output, session) {
                        "--n.batches 1",
                        "--generations", input$n.gen,
                        "--out.dir", output.directory(),
-                       "--data.set", data.set(),
                        "--data.set", data.set(),
                        "--metadata", metadata()
                          ) )

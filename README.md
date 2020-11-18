@@ -40,7 +40,7 @@ To ease the calculation burden for large data sets, data can be split into batch
 defines the number of batches. So to have 500K population split into 50 batches of 10K individuals each, you can set `params.gensize = 10000`, and `params.nbatches = 50`. Note that this will submit to your workload manager
 50 jobs (1 per batch) for each generation. When all the jobs in the first genration are  complete, the 50 batches for the new generation will be submitted, and so on.
 
-## Yes but what TARDiS do exactly?
+## Yes but what TARDiS does exactly?
 TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users.
 For a detailed discussion please be patient, a preprint and/or a user manual will be out soon.
 

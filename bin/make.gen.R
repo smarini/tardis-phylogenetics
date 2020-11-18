@@ -68,13 +68,13 @@ dist.m = read.distance.matrix(opt$distance)
 ### CHECK METADATA
 metadata = metadata[sapply(colnames(dist.m), function(x,df){which(metadata$Accession.ID == x)}, df=df),] # make sure id order is respected
 metadata$Collection.date = as.Date(metadata$Collection.date, format = "%d/%m/%Y")
+
 if(any(is.na(metadata$Collection.date))) { stop("NAs found in dates, check date format") }
 
 cl <- parallel::makeCluster(opt$n.cores)
 doParallel::registerDoParallel(cl)
 
 set.seed(seeds[(opt$generation*opt$tot.batches)+opt$batch])
-
 pairs.per.subsample = ((opt$n.samples^2)-opt$n.samples)/2
 
 if(opt$dist.opt == 'max') { max.d = sum(sort(dist.m, decreasing = TRUE)[1:pairs.per.subsample]) # estimate max distance based on largest paired distances
