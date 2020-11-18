@@ -45,9 +45,9 @@ ui <- fluidPage(
            verbatimTextOutput("n.gen") ),
     
     column( 3, offset = 0,
-           numericInput("w.div", "Genomic diversity weigth", 0.5, min = 0, max = 1, step = 0.01),
+           numericInput("w.div", "Genomic diversity weight", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_div"),  
-           numericInput("w.tem", "Temporal diversity weigth:", 0.5, min = 0, max = 1, step = 0.01),
+           numericInput("w.tem", "Temporal diversity weight:", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_tem"),
            selectInput("dist.opt", "Optimize genetic diversity",
                        c("Max diversity" = "max",
@@ -261,23 +261,22 @@ server <- function(input, output, session) {
                        "--generations", input$n.gen,
                        "--out.dir", output.directory(),
                        "--data.set", data.set(),
-                       "--data.set", data.set(),
                        "--metadata", metadata()
                          ) )
           message("Reports and results printed")
-          for(k in 1:input$n.subsamples) {
-            out.file = paste("output/subsample.GA", k, sep = '.')
-            system(paste("python3 ../bin/extractSeqs.py",
-                         gen.file(),
-                         paste(out.file, "csv", sep = '.'),
-                         ">", paste(out.file, "fa", sep = '.')) )
-          }
+          command.extractseqs = (paste("python3 ../bin/extractSeqs.py",
+                                       output.directory(),
+                                       gen.file(),
+                                       input$n.gen-1,
+                                       1, # n.batches
+                                       input$n.subsamples,
+                                       paste('GA', data.set(), sep = '.')))
+          system(command.extractseqs)
           return("Done")
         }else{
           return("Error processing data. Please check input file format and parameter choice.")
         }
       })
-      
     }else{
       return(paste('Wrong intial conditions. Distance, sequence, and metadata files should all be selected.',
                    'Fractions of random, evolved, and elite generated individuals currently sum to',
