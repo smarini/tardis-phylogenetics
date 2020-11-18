@@ -104,5 +104,5 @@ if __name__ == "__main__":
     if len(args) == 6:
         main(args)
     else:
-        sys.stdout.write("Usage: extractSeqs.py outdir fastafile generation nbatches nsubsamples\n")
+        sys.stdout.write("Usage: extractSeqs.py outdir fastafile generation nbatches nsubsamples dataset\n")
         sys.exit(1)
