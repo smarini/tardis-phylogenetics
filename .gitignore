@@ -2,3 +2,4 @@ output/example
 shiny_local/output
 paper
 bin/.Rhistory
+.Rhistory
