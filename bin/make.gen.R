@@ -48,8 +48,6 @@ option_list = list(
               help="bacth"),
   make_option(c("--tot.batches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
-  make_option(c("--basedir"), type="character", default=getwd(), 
-              help="base directory"),
   make_option(c("--dist.opt"), type="character", default="max", 
               help="Genetic distance optimized towards its max, mean, or median point"),
   make_option(c("--seeds"), type="character", default="data/seeds.txt", 
