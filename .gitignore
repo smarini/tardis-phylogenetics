@@ -3,3 +3,4 @@ shiny_local/output
 paper
 bin/.Rhistory
 .Rhistory
+data/example_group/data

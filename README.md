@@ -38,7 +38,7 @@ Particularly large data sets can be run on hpc. To do so, you need generate an a
 #### Batches
 To ease the calculation burden for large data sets, data can be split into batches. In the configuration file, `params.gensize` defines the individual per batch, while `params.nbatches`
 defines the number of batches. So to have 500K population split into 50 batches of 10K individuals each, you can set `params.gensize = 10000`, and `params.nbatches = 50`. Note that this will submit to your workload manager
-50 jobs (1 per batch) for each generation. When all the jobs in the first genration are  complete, the 50 batches for the new generation will be submitted, and so on.
+50 jobs (1 per batch) for each generation. When all the jobs in the first generation are  complete, the 50 batches for the new generation will be submitted, and so on.
 
 ## Yes but what TARDiS does exactly?
 TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users.
@@ -48,7 +48,6 @@ For a detailed discussion please be patient, a preprint and/or a user manual wil
 To run TARDiS, please install
 * [R >= 3.6.1](https://www.r-project.org/)
 * [Pyhton >= 3.7](https://www.python.org/) (works with Pyhton 2.7 as well)
-* [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 * [optparse >= 1.6.6](https://cran.r-project.org/web/packages/optparse/index.html)
 * [doRNG >= 1.8.2](https://cran.r-project.org/web/packages/doRNG/index.html)
 * [dplyr >= 1.0.0](https://cran.r-project.org/web/packages/dplyr/index.html)
@@ -61,6 +60,9 @@ For the GUI/explorer version, please install
 
 For the local/hpc command line version, please install
 * [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)
+
+To calculate Jukes-Cantor distances
+* [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
 
 TARDiS has been successfully used on Linux Ubuntu (local, commandline), Chrome (GUI) and SLURM (hpc). Please let use know if you are using it on other platforms.
 
