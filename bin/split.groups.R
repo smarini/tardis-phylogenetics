@@ -38,7 +38,7 @@ for(p in 1:dim(parameters)[1]){
   )
   parameter.file.name = paste0(data.dir, '/', parameters$group[p], '.config')
   writeLines(parameter.file, con='parameter.file.name')
-  message(parameter.file.name)
+  write(parameter.file.name, "")
 }
 
 # genomes of groups not listed in parameters will not be subsampled
@@ -48,11 +48,7 @@ not.to.subsample = unique(metadata$Group)[!unique(metadata$Group) %in% parameter
 for(p in not.to.subsample){
   data.dir = paste(opt$base.dir, 'data', p, sep = '/')
   system(paste('mkdir -p', data.dir)) # here we store stuff
+  write(data.dir, "")
   writeXStringSet(genomes[names(genomes) %in% metadata$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
   write.csv(metadata[metadata$Group %in% parameters$group[p],], file = paste(data.dir,  'metadata.csv', sep = '/') )
 }
-
-
-
-
-
