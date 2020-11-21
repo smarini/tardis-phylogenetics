@@ -36,7 +36,9 @@ for(p in 1:dim(parameters)[1]){
     paste0("params.data_set = \"", parameters$group[p], "\""),
     paste(colnames(options.tardis), '=', options.tardis)
   )
-  writeLines(parameter.file, con=paste0(data.dir, '/', parameters$group[p], '.config'))
+  parameter.file.name = paste0(data.dir, '/', parameters$group[p], '.config')
+  writeLines(parameter.file, con='parameter.file.name')
+  message(parameter.file.name)
 }
 
 # genomes of groups not listed in parameters will not be subsampled
