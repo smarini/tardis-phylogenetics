@@ -49,8 +49,3 @@ for(p in not.to.subsample){
   writeXStringSet(genomes[names(genomes) %in% metadata$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
   write.csv(metadata[metadata$Group %in% parameters$group[p],], file = paste(data.dir,  'metadata.csv', sep = '/') )
 }
-
-
-
-
-
