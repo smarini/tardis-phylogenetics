@@ -2,6 +2,7 @@
 
 TARDIS_HOME=$(dirname $(readlink -nf $0))
 
+RUNDIR="."
 NGENS=10
 AFILE="aln.fa"
 DFILE="jc.distance.precalc.csv"
@@ -11,6 +12,7 @@ MODE="GA"
 DEBUG=""
 CONFS=""
 SHINY="N"
+GROUPFILE=""
 
 # Colors are fun...
 B='\033[1;34m'
@@ -18,172 +20,228 @@ Y='\033[1;33m'
 R='\033[1;31m'
 N='\033[0m'
 
+  while getopts ":g:r:n:a:d:m:o:xsbhv" opt; do
+	case ${opt} in
+	    s )
+		SHINY="Y"
+		;;
+	    g )
+		GROUPFILE=$OPTARG
+		;;
+	    r )
+		RUNDIR=$OPTARG
+		;;
+	    n ) 
+		NGENS=$OPTARG
+		;;
+	    a )
+		AFILE=$OPTARG
+		;;
+	    d )
+		DFILE=$OPTARG
+		;;
+	    m )
+		MFILE=$OPTARG
+		;;
+	    o )
+		OUTDIR=$OPTARG
+		;;
+	    x )
+		DEBUG="y"
+		;;
+	    b )
+		MODE="BF"
+		;;
+	    v )
+		echo -e ${B}
+		echo H4sIALuOCF8AA7VVUZLDIAj95zQGFZrjtDbe/wiLmzpGo4Z0docxOIjPByhBg1p5m2dtgZlzknbDR4KPPkL6FOGwj1Yw9EBgx78jBeZAm0OZe+cWj87R6q2sEBprcLPr8VwO0KGj5gB9QgV95+MNRQq0kiVf4PNmcXBIkR95i4aRKmG9TCdG3TofU1fbaxho3Mt5F/YEczo5uyedx8gOPTpaGGgXZjAteZhHNYcBbXKGpaqjSVckz9oop6U6a4pjmGGpNBVXlGoMA3dy3GoYR3sNA7NkqUp17zkMS/WHr+pKK19VX59u2H+9qtdXDVDk1ULlmB9kUf4FFu3vQDF7TxutTOQZ2crMsXhI76Yjq+p340gae2SU5u5oEQiUzdLmaRGbJenp4hE5Acs6OxDHSJsmwrP0Y5YIzRN+AAWDMfD4BwAA|base64 -d|zcat|xxd -r -p
+		echo -e ${N}
+		exit 222
+		;;
+	    
+	    h )
+		usage
+		exit 0
+		;;
+	    \? )
+		echo "Invalid option: $OPTARG"
+		usage
+		exit 1
+		;;
+	    : )
+		echo "Invalid option: $OPTARG requires an argument."
+		usage
+		exit 1
+		;;
+	esac
+    done
+
 usage() {
     echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
     echo
-    echo "Usage: tardis [options] dataset"
+    echo "Usage: tardis [options] DATASET"
     echo 
-    echo "where 'dataset' is the dataset name. The program assumes that the current directory"
+    echo "where DATASET is the dataset name. The program assumes that the run directory (RDIR)"
     echo "contains a configuration file called DATASET.config, and a subdirectory called data/,"
     echo "containing in turn a subdirectory named after the dataset. The three files indicated"
     echo "by the -a, -d, and -m options should be located in that directory."
     echo
     echo "Options:"
     echo
-    echo " -g       | Enable Shiny GUI (all other options ignored)"
-#    echo " -b       | Enable brute-force method (default: GA method)"
-    echo " -n NGENS | Set number of generations for GA (defaut: $NGENS)"
-    echo " -a AFILE | Name of alignment file (default: $AFILE)"
-    echo " -d DFILE | Name of distances file (default: $DFILE)"
-    echo " -m MFILE | Name of metadata file (default: $MFILE)"
-    echo " -o ODIR  | Name of output directory (default: output/dataset)"
-    echo " -x       | Enable debug mode (will not delete intermediate files)"
-    echo " -v       | Display version number and copyright notice"
+    echo " -s        | Enable Shiny GUI (all other options ignored)"
+    echo " -g GROUPS | Enable groups mode"
+    #    echo " -b       | Enable brute-force method (default: GA method)"
+    echo " -r RDIR   | Set run directory (default: current directory)" 
+    echo " -n NGENS  | Set number of generations for GA (defaut: $NGENS)"
+    echo " -a AFILE  | Name of alignment file (default: $AFILE)"
+    echo " -d DFILE  | Name of distances file (default: $DFILE)"
+    echo " -m MFILE  | Name of metadata file (default: $MFILE)"
+    echo " -o ODIR   | Name of output directory (default: output/dataset)"
+    echo " -x        | Enable debug mode (will not delete intermediate files)"
+    echo " -v        | Display version number and copyright notice"
     echo
 }
 
-while getopts ":n:a:d:m:o:xgbhv" opt; do
-    case ${opt} in
-	g )
-	    SHINY="Y"
-	    ;;
-	n ) 
-	    NGENS=$OPTARG
-	    ;;
-	a )
-	    AFILE=$OPTARG
-	    ;;
-	d )
-	    DFILE=$OPTARG
-	    ;;
-	m )
-	    MFILE=$OPTARG
-	    ;;
-	o )
-	    OUTDIR=$OPTARG
-	    ;;
-	x )
-	    DEBUG="y"
-	    ;;
-	b )
-	    MODE="BF"
-	    ;;
-	v )
-	    echo -e ${B}
-	    echo H4sIALuOCF8AA7VVUZLDIAj95zQGFZrjtDbe/wiLmzpGo4Z0docxOIjPByhBg1p5m2dtgZlzknbDR4KPPkL6FOGwj1Yw9EBgx78jBeZAm0OZe+cWj87R6q2sEBprcLPr8VwO0KGj5gB9QgV95+MNRQq0kiVf4PNmcXBIkR95i4aRKmG9TCdG3TofU1fbaxho3Mt5F/YEczo5uyedx8gOPTpaGGgXZjAteZhHNYcBbXKGpaqjSVckz9oop6U6a4pjmGGpNBVXlGoMA3dy3GoYR3sNA7NkqUp17zkMS/WHr+pKK19VX59u2H+9qtdXDVDk1ULlmB9kUf4FFu3vQDF7TxutTOQZ2crMsXhI76Yjq+p340gae2SU5u5oEQiUzdLmaRGbJenp4hE5Acs6OxDHSJsmwrP0Y5YIzRN+AAWDMfD4BwAA|base64 -d|zcat|xxd -r -p
-	    echo -e ${N}
-	    exit 222
-	    ;;
+test_shiny() {
+  if [ "$SHINY" == "Y" ];
+  then
+    echo "Starting Shiny interface, use Ctrl-c to quit."
+    Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
+    exit
+  fi
+}
 
-	h )
-	    usage
-	    exit 0
-	    ;;
-	\? )
-	    echo "Invalid option: $OPTARG"
-	    usage
-	    exit 1
-	    ;;
-	: )
-	    echo "Invalid option: $OPTARG requires an argument."
-	    usage
-	    exit 1
-	    ;;
-    esac
-done
+validate_options() {
+  shift $((OPTIND - 1))
 
-if [ "$SHINY" == "Y" ];
+  if [[ "$GROUPFILE" == "" ]];
+  then
+    DATASET=$1
+    if [[ "$DATASET" == "" ]];
+    then
+      usage
+      exit 1
+    fi
+
+    CONF=${RUNDIR}/${DATASET}.config
+    if [ ! -f $CONF ];
+    then
+      echo "Configuration file $CONF not found!"
+      exit 1
+    fi
+    echo Configuration file found: $CONF
+    INDIR=${RUNDIR}/data/$DATASET
+  else
+    INDIR=${RUNDIR}
+  fi
+
+  # Check that the input directory exists.
+  if [ ! -d $INDIR ];
+  then
+    echo "Directory $INDIR not found!"
+    exit 2
+  fi
+  if [ ! -f $INDIR/$AFILE ];
+  then
+    echo "Alignments file $INDIR/$AFILE not found!"
+    exit 2
+  fi
+  if [ ! -f $INDIR/$MFILE ];
+  then
+    echo "Metadata file $INDIR/$MFILE not found!"
+    exit 2
+  fi
+  if [ ! -f $INDIR/$DFILE ];
+  then
+    echo "Distances file $INDIR/$DFILE not found - generating..."
+    Rscript ${TARDIS_HOME}/bin/pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
+  fi
+  echo Data directory found: $INDIR
+  
+  if [ "$OUTDIR" == "" ];
+  then
+    OUTDIR=output/${DATASET}
+  fi
+  mkdir -p $OUTDIR
+  echo Output directory: $OUTDIR
+  #rm -f ${OUTDIR}/*
+
+  echo
+}
+
+main_single() {
+  FASTAS=""
+
+  if [ "$MODE" == "BF" ];
+  then
+    echo "*** Executing Brute Force method..."
+    Rscript ${TARDIS_HOME}/bin/brute.force.R -s $DATASET -d $INDIR/$DFILE -m $INDIR/$MFILE
+    echo "*** Brute Force done."
+  else
+    echo "*** Executing GA method..."
+    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data.set $DATASET --distances $INDIR/$DFILE \
+             --metadata $INDIR/$MFILE --ngenerations $NGENS --outdir $OUTDIR --afile $INDIR/$AFILE
+    Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
+    echo "*** GA done."
+    echo
+  fi
+  
+  echo
+  
+  if [ "$DEBUG" != "y" ];
+  then
+    rm -rf work
+    rm -f $OUTDIR/${MODE}.*.fitness.csv $OUTDIR/${MODE}.*.subsamples.csv
+  fi
+  
+  echo -e "${R}*** Final results:"
+  for f in $OUTDIR/subsample.${MODE}.${DATASET}.*.fa;
+    do 
+      echo "  " $f
+  done
+  if [ -f "$OUTDIR/example.per.gen.stats.png" ];
+  then
+    echo
+    echo "Fitness statistics plot: $OUTDIR/example.per.gen.stats.png"
+  fi
+  echo -e $N
+}
+
+main_groups() {
+  CONFIGS=""
+  NOCONFIGS=""
+  for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>/dev/null);
+    do
+      case $path in
+	  *.config)
+	      CONFIGS="$CONFIGS $path"
+	      ;;
+	  *)
+	      NOCONFIGS="$NOCONFIGS $path"
+      esac
+  done
+  for conf in $CONFIGS;
+    do
+      echo $0 -r $RUNDIR -a $AFILE -m $MFILE -d $DFILE -o $OUTDIR $conf
+      $0 -r $RUNDIR -a $AFILE -m $MFILE -d $DFILE -o $OUTDIR $conf
+  done
+}
+
+# Make R available in your environment, if using modules
+if command -v module &> /dev/null
 then
-  echo "Starting Shiny interface, use Ctrl-c to quit."
-  Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
-  exit
-fi
+  module load R
+fi  
 
-shift $((OPTIND - 1))
-DATASET=$1
-if [ "$DATASET" == "" ];
-then
-  usage
-  exit 1
-fi
+# Entry point
 
-CONF=${DATASET}.config
-if [ ! -f $CONF ];
-then
-  echo "Configuration file $CONF not found!"
-  exit 1
-fi
-echo Configuration file found: $CONF
+test_shiny			# this exits if successful
+validate_options
 
-# Make R available in your environment
-module load R
-
-# Check that the input directory exists.
-INDIR=data/$DATASET
-
-if [ ! -d $INDIR ];
+if [ "$GROUPFILE" == "" ];
 then
-  echo "Directory $INDIR not found!"
-  exit 2
-fi
-if [ ! -f $INDIR/$AFILE ];
-then
-  echo "Alignments file $INDIR/$AFILE not found!"
-  exit 2
-fi
-if [ ! -f $INDIR/$MFILE ];
-then
-  echo "Metadata file $INDIR/$MFILE not found!"
-  exit 2
-fi
-if [ ! -f $INDIR/$DFILE ];
-then
-  echo "Distances file $INDIR/$DFILE not found - generating..."
-  Rscript ${TARDIS_HOME}/bin/pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
-fi
-echo Data directory found: $INDIR
-
-if [ "$OUTDIR" == "" ];
-then
-  OUTDIR=output/${DATASET}
-fi
-mkdir -p $OUTDIR
-echo Output directory: $OUTDIR
-#rm -f ${OUTDIR}/*
-
-echo
-FASTAS=""
-
-if [ "$MODE" == "BF" ];
-then
-  echo "*** Executing Brute Force method..."
-  Rscript ${TARDIS_HOME}/bin/brute.force.R -s $DATASET -d $INDIR/$DFILE -m $INDIR/$MFILE
-  echo "*** Brute Force done."
+  main_single
 else
-  echo "*** Executing GA method..."
-  nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --data.set $DATASET --distances $INDIR/$DFILE \
-               --metadata $INDIR/$MFILE --ngenerations $NGENS --outdir $OUTDIR --afile $INDIR/$AFILE
-  Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
-  echo "*** GA done."
-  echo
+  main_groups
 fi
 
-echo
-
-if [ "$DEBUG" != "y" ];
-then
-  rm -rf work
-  rm -f $OUTDIR/${MODE}.*.fitness.csv $OUTDIR/${MODE}.*.subsamples.csv
-fi
-
-echo -e "${R}*** Final results:"
-for f in $OUTDIR/subsample.${MODE}.${DATASET}.*.fa;
-do 
-  echo "  " $f
-done
-if [ -f "$OUTDIR/example.per.gen.stats.png" ];
-then
-  echo
-  echo "Fitness statistics plot: $OUTDIR/example.per.gen.stats.png"
-fi
-echo -e $N
