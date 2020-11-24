@@ -167,9 +167,6 @@ test_shiny() {
   fi
 }
 
-validate_options() {
-}
-
 main_single() {
   FASTAS=""
 
@@ -238,7 +235,6 @@ fi
 # Entry point
 
 test_shiny			# this exits if successful
-validate_options
 
 if [ "$GROUPFILE" == "" ];
 then
