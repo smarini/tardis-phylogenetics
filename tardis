@@ -115,7 +115,7 @@ N='\033[0m'
   if [ ! -f $INDIR/$DFILE ];
   then
     echo "Distances file $INDIR/$DFILE not found - generating..."
-    Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
+    Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE 2>/dev/null
   fi
   echo Data directory found: $INDIR
   
