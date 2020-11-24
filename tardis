@@ -80,21 +80,18 @@ N='\033[0m'
 
   if [[ "$GROUPFILE" == "" ]];
   then
-    DATASET=$1
-    if [[ "$DATASET" == "" ]];
-    then
-      usage
-      exit 1
-    fi
+    CONF=$1
+    DATASET=$(basename ${CONF%.config})
 
-    CONF=${RUNDIR}/${DATASET}.config
     if [ ! -f $CONF ];
     then
       echo "Configuration file $CONF not found!"
       exit 1
     fi
+    INDIR=$(dirname $CONF)
     echo Configuration file found: $CONF
-    INDIR=${RUNDIR}/data/$DATASET
+    echo Dataset: $DATASET
+    echo Dataset directory: $INDIR
   else
     INDIR=${RUNDIR}
   fi
