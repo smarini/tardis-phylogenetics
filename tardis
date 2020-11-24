@@ -5,7 +5,7 @@ TARDIS_HOME=$(dirname $(readlink -nf $0))
 RUNDIR="."
 NGENS=10
 AFILE="aln.fa"
-DFILE="jc.distance.precalc.csv"
+DFILE="jc.distance.precalc.rds"
 MFILE="metadata.csv"
 OUTDIR=""
 MODE="GA"
@@ -154,7 +154,7 @@ validate_options() {
   if [ ! -f $INDIR/$DFILE ];
   then
     echo "Distances file $INDIR/$DFILE not found - generating..."
-    Rscript ${TARDIS_HOME}/bin/pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
+    Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
   fi
   echo Data directory found: $INDIR
   
@@ -212,6 +212,7 @@ main_groups() {
   NOCONFIGS=""
   for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>/dev/null);
     do
+      echo $path
       case $path in
 	  *.config)
 	      CONFIGS="$CONFIGS $path"
