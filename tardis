@@ -76,42 +76,6 @@ N='\033[0m'
 	esac
     done
 
-usage() {
-    echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
-    echo
-    echo "Usage: tardis [options] DATASET"
-    echo 
-    echo "where DATASET is the dataset name. The program assumes that the run directory (RDIR)"
-    echo "contains a configuration file called DATASET.config, and a subdirectory called data/,"
-    echo "containing in turn a subdirectory named after the dataset. The three files indicated"
-    echo "by the -a, -d, and -m options should be located in that directory."
-    echo
-    echo "Options:"
-    echo
-    echo " -s        | Enable Shiny GUI (all other options ignored)"
-    echo " -g GROUPS | Enable groups mode"
-    #    echo " -b       | Enable brute-force method (default: GA method)"
-    echo " -r RDIR   | Set run directory (default: current directory)" 
-    echo " -n NGENS  | Set number of generations for GA (defaut: $NGENS)"
-    echo " -a AFILE  | Name of alignment file (default: $AFILE)"
-    echo " -d DFILE  | Name of distances file (default: $DFILE)"
-    echo " -m MFILE  | Name of metadata file (default: $MFILE)"
-    echo " -o ODIR   | Name of output directory (default: output/dataset)"
-    echo " -x        | Enable debug mode (will not delete intermediate files)"
-    echo " -v        | Display version number and copyright notice"
-    echo
-}
-
-test_shiny() {
-  if [ "$SHINY" == "Y" ];
-  then
-    echo "Starting Shiny interface, use Ctrl-c to quit."
-    Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
-    exit
-  fi
-}
-
-validate_options() {
   shift $((OPTIND - 1))
 
   if [[ "$GROUPFILE" == "" ]];
@@ -167,6 +131,43 @@ validate_options() {
   #rm -f ${OUTDIR}/*
 
   echo
+
+usage() {
+    echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
+    echo
+    echo "Usage: tardis [options] DATASET"
+    echo 
+    echo "where DATASET is the dataset name. The program assumes that the run directory (RDIR)"
+    echo "contains a configuration file called DATASET.config, and a subdirectory called data/,"
+    echo "containing in turn a subdirectory named after the dataset. The three files indicated"
+    echo "by the -a, -d, and -m options should be located in that directory."
+    echo
+    echo "Options:"
+    echo
+    echo " -s        | Enable Shiny GUI (all other options ignored)"
+    echo " -g GROUPS | Enable groups mode"
+    #    echo " -b       | Enable brute-force method (default: GA method)"
+    echo " -r RDIR   | Set run directory (default: current directory)" 
+    echo " -n NGENS  | Set number of generations for GA (defaut: $NGENS)"
+    echo " -a AFILE  | Name of alignment file (default: $AFILE)"
+    echo " -d DFILE  | Name of distances file (default: $DFILE)"
+    echo " -m MFILE  | Name of metadata file (default: $MFILE)"
+    echo " -o ODIR   | Name of output directory (default: output/dataset)"
+    echo " -x        | Enable debug mode (will not delete intermediate files)"
+    echo " -v        | Display version number and copyright notice"
+    echo
+}
+
+test_shiny() {
+  if [ "$SHINY" == "Y" ];
+  then
+    echo "Starting Shiny interface, use Ctrl-c to quit."
+    Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
+    exit
+  fi
+}
+
+validate_options() {
 }
 
 main_single() {
