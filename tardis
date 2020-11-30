@@ -88,12 +88,12 @@ N='\033[0m'
       echo "Configuration file $CONF not found!"
       exit 1
     fi
-    INDIR=$(dirname $CONF)
+    INDIR=$(dirname $(readlink -f $CONF))
     echo Configuration file found: $CONF
     echo Dataset: $DATASET
     echo Dataset directory: $INDIR
   else
-    INDIR=${RUNDIR}
+    INDIR=$(readlink -f ${RUNDIR})
   fi
 
   # Check that the input directory exists.
