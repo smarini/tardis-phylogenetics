@@ -112,11 +112,10 @@ process DoIt {
           --generation $gen \
           --batch $batch \
 	  --dist.opt ${params.dist_opt} \
-	  --basedir ${workflow.launchDir} \
-          --seeds ${workflow.launchDir}/${params.seeds} \
-	  --distance ${workflow.launchDir}/${params.distances} \
-	  --metadata ${workflow.launchDir}/${params.metadata} \
-	  --out.dir ${workflow.launchDir}/${params.outdir}
+          --seeds ${params.seeds} \
+	  --distance ${params.distances} \
+	  --metadata ${params.metadata} \
+	  --out.dir ${params.outdir}
 	"""
 }
 
