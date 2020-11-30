@@ -78,7 +78,7 @@ Channel
 	.set { genround }
 
 process DoIt {
-	memory "25G"
+	memory "5G"
 
 	input:
 	tuple gen, batch from genround
