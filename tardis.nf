@@ -38,12 +38,12 @@ process Init {
 
 	"""
 	#!/bin/bash
-/*	if [ ! -d "${workflow.launchDir}/data/${params.data_set}" ];
-	then
-	  echo "Error: this program expects a subdirectory called data/${params.data_set} in the current directory."
-	  exit 1
-	fi
-*/
+	#if [ ! -d "${workflow.launchDir}/data/${params.data_set}" ];
+	#then
+	#  echo "Error: this program expects a subdirectory called data/${params.data_set} in the current directory."
+	#  exit 1
+	#fi
+
 	checkParams.py ${params.frac_new} ${params.frac_evolved} ${params.frac_elite} ${params.gensize} ${params.dist_opt}
 	"""
 }
