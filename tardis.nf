@@ -151,6 +151,6 @@ process Conclusion {
 	script:
 	"""
 	#!/bin/bash
-	extractSeqs.py ${workflow.launchDir}/${params.outdir} ${workflow.launchDir}/${params.afile} ${params.ngenerations} ${params.nbatches} ${params.n_samples} GA.${params.data_set}
+	extractSeqs.py ${workflow.launchDir}/${params.outdir} ${params.afile} ${params.ngenerations} ${params.nbatches} ${params.n_samples} GA.${params.data_set}
 	"""
 }
