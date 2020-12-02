@@ -222,6 +222,9 @@ main_groups() {
       echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
            $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
   done
+  # Now combine output files
+
+  cat ${OUTDIR}/subsamples.GA.*.1.fa > ${OUTDIR}/subsamples.GA.final.fa
 }
 
 # Make R available in your environment, if using modules
