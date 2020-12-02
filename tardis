@@ -220,7 +220,7 @@ main_groups() {
   for conf in $CONFIGS;
     do
       echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
-      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
+           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
   done
 }
 
