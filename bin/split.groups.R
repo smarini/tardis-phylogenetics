@@ -7,11 +7,11 @@ library(Biostrings)
 option_list = list(
   make_option("--base.dir", type="character", default="data/example_group", 
               help="data folder for the project; will be used to generate group sub data folders"),
-  make_option("--genome.file", type="character", default="data/example_group.dataset", 
+  make_option("--genome.file", type="character", default="data/example_group/aln.group.fa", 
               help="file with genomes, format fasta"),
-  make_option("--metadata", type="character", default='data/example_group/metadata.csv', 
+  make_option("--metadata", type="character", default='data/example_group/metadata.group.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format; and column Group"),
-  make_option("--group.parameters", type="character", default='data/example_group/parametes.group.csv', 
+  make_option("--group.parameters", type="character", default='data/example_group/parameters.group.csv', 
               help="parameter file; one line per group; unspecified options will go to default")
   )
 
@@ -25,30 +25,21 @@ metadata = metadata[sapply(names(genomes), function(x,df){which(metadata$Accessi
 parameters = read.csv(opt$group.parameters, stringsAsFactors=FALSE)
 
 # generate project folder
-for(p in 1:dim(parameters)[1]){
-  data.dir = paste(opt$base.dir, 'data', parameters$group[p], sep = '/')
-  system(paste('mkdir -p', data.dir)) # here we store stuff
-  writeXStringSet(genomes[names(genomes) %in% metadata$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
-  write.csv(metadata[metadata$Group %in% parameters$group[p],], file = paste(data.dir,  'metadata.csv', sep = '/') )
-  
-  options.tardis = parameters[p,-c(which(colnames(parameters) == 'group'), which(is.na(parameters[p,]))), drop = FALSE]
-  parameter.file = c(
-    paste0("params.data_set = \"", parameters$group[p], "\""),
-    paste(colnames(options.tardis), '=', options.tardis)
-  )
-  parameter.file.name = paste0(data.dir, '/', parameters$group[p], '.config')
-  writeLines(parameter.file, con='parameter.file.name')
-  write(parameter.file.name, "")
-}
-
-# genomes of groups not listed in parameters will not be subsampled
-# and will be fully included in the solution
-not.to.subsample = unique(metadata$Group)[!unique(metadata$Group) %in% parameters$group]
-
-for(p in not.to.subsample){
+for(p in unique(metadata$Group)){
   data.dir = paste(opt$base.dir, 'data', p, sep = '/')
   system(paste('mkdir -p', data.dir)) # here we store stuff
-  write(data.dir, "")
-  writeXStringSet(genomes[names(genomes) %in% metadata$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
-  write.csv(metadata[metadata$Group %in% parameters$group[p],], file = paste(data.dir,  'metadata.csv', sep = '/') )
+  metadata.tmp = metadata[metadata$Group %in% p,]
+  writeXStringSet(genomes[names(genomes) %in% metadata.tmp$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
+  write.csv(metadata.tmp, file = paste(data.dir, 'metadata.csv', sep = '/'), quote = FALSE, row.names = FALSE )
+  
+  if(p %in% parameters$group){
+    options.tardis = parameters[which(parameters$group == p),-c(which(colnames(parameters) == 'group'), which(is.na(parameters[which(parameters$group == p),]))), drop = FALSE]
+    parameter.file = c(
+      paste0("params.data_set = \"", p, "\""),
+      paste(colnames(options.tardis), '=', options.tardis)
+    )
+    parameter.file.name = paste0(data.dir, '/', p, '.config')
+    writeLines(parameter.file, con=parameter.file.name)
+    write(parameter.file.name, "")
+  }
 }

@@ -4,3 +4,5 @@ paper
 bin/.Rhistory
 .Rhistory
 data/example_group/data
+R.log
+.nextflow
