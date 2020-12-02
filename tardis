@@ -224,7 +224,7 @@ main_groups() {
   done
   # Now combine output files
 
-  cat ${OUTDIR}/subsamples.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
+  cat ${OUTDIR}/subsample.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
   for nd in $NOCONFIGS;
   do
     cat ${nd}/aln.fa >> ${OUTDIR}/subsample.GA.final.fa
