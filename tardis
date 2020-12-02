@@ -225,6 +225,10 @@ main_groups() {
   # Now combine output files
 
   cat ${OUTDIR}/subsamples.GA.*.1.fa > ${OUTDIR}/subsamples.GA.final.fa
+  for nd in $NOCONFIGS;
+  do
+    cat ${nd}/aln.fa >> ${OUTDIR}/subsamples.GA.final.fa
+  done
 }
 
 # Make R available in your environment, if using modules
