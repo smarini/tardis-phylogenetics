@@ -118,7 +118,6 @@ usage() {
     INDIR=$(dirname $(readlink -f $CONF))
     echo Configuration file found: $CONF
     echo Dataset: $DATASET
-    echo Dataset directory: $INDIR
   else
     INDIR=$(readlink -f ${RUNDIR})
   fi
@@ -129,6 +128,7 @@ usage() {
     echo "Directory $INDIR not found!"
     exit 2
   fi
+  echo Dataset directory: $INDIR
   if [ ! -f $INDIR/$AFILE ];
   then
     echo "Alignments file $INDIR/$AFILE not found!"
@@ -219,8 +219,8 @@ main_groups() {
   done
   for conf in $CONFIGS;
     do
-      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $conf
-      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $conf
+      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
+      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
   done
 }
 

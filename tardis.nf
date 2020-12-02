@@ -3,7 +3,7 @@
 params.data_set = "USA"
 params.n_samples = 10
 params.gensize = 100
-params.nbatches = 5
+params.nbatches = 1
 params.n_cores = 2
 params.ngenerations = 10
 
@@ -98,6 +98,24 @@ process DoIt {
         else
           fnew=${params.frac_new}; fevo=${params.frac_evolved}; feli=${params.frac_elite}
         fi
+	echo Rscript ${workflow.projectDir}/bin/make.gen.R \
+          --frac.new \$fnew \
+	  --frac.evo \$fevo \
+	  --frac.eli \$feli \
+	  --n.samples ${params.n_samples} \
+	  --gen.size ${params.gensize} \
+	  --tot.batches ${params.nbatches} \
+	  --n.cores ${params.n_cores} \
+	  --data.set ${params.data_set} \
+          --w.div ${params.w_div} \
+          --w.tem ${params.w_tem} \
+          --generation $gen \
+          --batch $batch \
+	  --dist.opt ${params.dist_opt} \
+          --seeds ${workflow.launchDir}/${params.seeds} \
+	  --distance ${params.distances} \
+	  --metadata ${params.metadata} \
+	  --out.dir ${workflow.launchDir}/${params.outdir}
 	Rscript ${workflow.projectDir}/bin/make.gen.R \
           --frac.new \$fnew \
 	  --frac.evo \$fevo \
