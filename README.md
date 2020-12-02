@@ -4,7 +4,7 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 ## Quick start
 Download TARDiS and make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example:
 
-`[path/to/tardis]/tardis -g`
+`[path/to/tardis]/tardis -s`
 
 and the TARDiS explorer GUI will open in your default browser. Retrieve example data in `data/example` and click on `Run Tardis`.
 
