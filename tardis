@@ -4,6 +4,7 @@ TARDIS_HOME=$(dirname $(readlink -nf $0))
 
 RUNDIR="."
 NGENS=10
+NBATCHES=1
 AFILE="aln.fa"
 DFILE="jc.distance.precalc.rds"
 MFILE="metadata.csv"
@@ -34,7 +35,7 @@ usage() {
     echo
     echo " -s        | Enable Shiny GUI (all other options ignored)"
     echo " -g GROUPS | Enable groups mode"
-    #    echo " -b       | Enable brute-force method (default: GA method)"
+    echo " -b NBATCH | Number of batches (default: $NBATCHES)"
     echo " -r RDIR   | Set run directory (default: current directory)" 
     echo " -n NGENS  | Set number of generations for GA (defaut: $NGENS)"
     echo " -a AFILE  | Name of alignment file (default: $AFILE)"
@@ -54,6 +55,9 @@ usage() {
 		;;
 	    g )
 		GROUPFILE=$OPTARG
+		;;
+	    b )
+		NBATCHES=$OPTARG
 		;;
 	    r )
 		RUNDIR=$OPTARG
@@ -176,7 +180,7 @@ main_single() {
   else
     echo "*** Executing GA method..."
     nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --distances $INDIR/$DFILE \
-             --metadata $INDIR/$MFILE --ngenerations $NGENS --outdir $OUTDIR --afile $INDIR/$AFILE
+             --metadata $INDIR/$MFILE --ngenerations $NGENS --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
     Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
     echo "*** GA done."
     echo
@@ -219,8 +223,8 @@ main_groups() {
   done
   for conf in $CONFIGS;
     do
-      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
-           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS $conf
+      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
+           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
   done
   # Now combine output files
 
