@@ -226,9 +226,11 @@ main_groups() {
       echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
            $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
   done
-  # Now combine output files
 
-  cat ${OUTDIR}/subsample.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
+  # Now combine output files
+  mkdir -p ${OUTDIR}/by.group
+  mv ${OUTDIR}/* ${OUTDIR}/by.group
+  cat ${OUTDIR}/by.group/subsample.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
   for nd in $NOCONFIGS;
   do
     cat ${nd}/aln.fa >> ${OUTDIR}/subsample.GA.final.fa
