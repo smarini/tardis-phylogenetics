@@ -146,6 +146,7 @@ usage() {
   if [ ! -f $INDIR/$DFILE ];
   then
     echo "Distances file $INDIR/$DFILE not found - generating..."
+    echo Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
     Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE 2>/dev/null
   fi
   echo Data directory found: $INDIR
@@ -180,7 +181,7 @@ main_single() {
   else
     echo "*** Executing GA method..."
     nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --distances $INDIR/$DFILE \
-             --metadata $INDIR/$MFILE --ngenerations $NGENS --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
+             --metadata $INDIR/$MFILE --ngenerations $NGENS --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE -N ${USER}@ufl.edu
     Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
     echo "*** GA done."
     echo

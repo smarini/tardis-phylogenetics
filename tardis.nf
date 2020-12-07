@@ -78,7 +78,7 @@ Channel
 	.set { genround }
 
 process DoIt {
-	memory "5G"
+	memory "128G"
 
 	input:
 	tuple gen, batch from genround
@@ -115,7 +115,7 @@ process DoIt {
           --seeds ${workflow.launchDir}/${params.seeds} \
 	  --distance ${params.distances} \
 	  --metadata ${params.metadata} \
-	  --out.dir ${workflow.launchDir}/${params.outdir}
+	  --out.dir ${workflow.launchDir}/${params.outdir} > ${workflow.launchDir}/make.gen.${gen}.cmd
 	Rscript ${workflow.projectDir}/bin/make.gen.R \
           --frac.new \$fnew \
 	  --frac.evo \$fevo \
