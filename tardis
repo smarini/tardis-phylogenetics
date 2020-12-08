@@ -14,6 +14,7 @@ DEBUG=""
 CONFS=""
 SHINY="N"
 GROUPFILE=""
+PROF="local"
 
 # Colors are fun...
 B='\033[1;34m'
@@ -42,13 +43,14 @@ usage() {
     echo " -d DFILE  | Name of distances file (default: $DFILE)"
     echo " -m MFILE  | Name of metadata file (default: $MFILE)"
     echo " -o ODIR   | Name of output directory (default: output/dataset)"
+    echo " -p PROF   | Profile name (default: $PROF)"
     echo " -x        | Enable debug mode (will not delete intermediate files)"
     echo " -v        | Display version number and copyright notice"
     echo
 }
 
 # Parse command-line options
-  while getopts ":g:r:n:a:d:m:o:xsbhv" opt; do
+  while getopts ":g:p:r:n:a:d:m:o:xsbhv" opt; do
 	case ${opt} in
 	    s )
 		SHINY="Y"
@@ -76,6 +78,9 @@ usage() {
 		;;
 	    o )
 		OUTDIR=$OPTARG
+		;;
+	    p )
+		PROF=$OPTARG
 		;;
 	    x )
 		DEBUG="y"
@@ -180,8 +185,10 @@ main_single() {
     echo "*** Brute Force done."
   else
     echo "*** Executing GA method..."
-    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF --distances $INDIR/$DFILE \
-             --metadata $INDIR/$MFILE --ngenerations $NGENS --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE -N ${USER}@ufl.edu
+    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
+             --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
+
     Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
     echo "*** GA done."
     echo
