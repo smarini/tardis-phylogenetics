@@ -43,14 +43,14 @@ usage() {
     echo " -d DFILE  | Name of distances file (default: $DFILE)"
     echo " -m MFILE  | Name of metadata file (default: $MFILE)"
     echo " -o ODIR   | Name of output directory (default: output/dataset)"
-    echo " -p PROF   | Profile name (default: $PROF)"
+    echo " -p PROF   | Profile name, possible values: local, small, medium, large (default: $PROF)"
     echo " -x        | Enable debug mode (will not delete intermediate files)"
     echo " -v        | Display version number and copyright notice"
     echo
 }
 
 # Parse command-line options
-  while getopts ":g:p:r:n:a:d:m:o:xsbhv" opt; do
+  while getopts ":g:p:b:r:n:a:d:m:o:xshv" opt; do
 	case ${opt} in
 	    s )
 		SHINY="Y"
@@ -185,7 +185,7 @@ main_single() {
     echo "*** Brute Force done."
   else
     echo "*** Executing GA method..."
-echo    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
              --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
              --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
 
