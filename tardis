@@ -231,8 +231,9 @@ main_groups() {
   done
   for conf in $CONFIGS;
     do
-      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
-           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $conf
+      gprof=$(grep ^profile $conf | cut -d = -f 2)
+      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES -p $gprof $conf
+#           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES -p $grpof $conf
   done
 
   # Now combine output files
