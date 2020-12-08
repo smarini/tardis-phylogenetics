@@ -53,9 +53,10 @@ option_list = list(
   make_option("--seeds", type="character", default="data/seeds.txt", 
               help="file with a seeds per line/generation"),
   make_option("--out.dir", type="character", default=getwd(), 
-              help="output directory")
-              )
-
+              help="output directory"),
+  make_option("--profile", type="character", default="local", 
+            help="tardis nextflow profile; for internal use only")
+)
 opt_parser = OptionParser(option_list=option_list);
 opt = parse_args(opt_parser);
 

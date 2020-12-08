@@ -1,4 +1,4 @@
-group,param.ncores,param.nsamples,param.gensize,param.nbatches,param.ngenerations,param.fracnew,param.fracevolved,param.fracelite
-a,4,10,100,1,10,0.15,0.80,0.05
-b,4,5,50,1,10,,,
+group,param.ncores,param.nsamples,param.gensize,param.nbatches,param.ngenerations,param.fracnew,param.fracevolved,param.fracelite,profile
+a,4,10,100,1,10,0.15,0.80,0.05,local
+b,4,5,50,1,10,,,local
 
