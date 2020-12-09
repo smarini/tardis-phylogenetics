@@ -36,7 +36,7 @@ for(p in unique(metadata$group)){
     options.tardis = parameters[which(parameters$group == p),-c(which(colnames(parameters) %in% c('profile', 'group')), which(is.na(parameters[which(parameters$group == p),]))), drop = FALSE]
     parameter.file = c(
       paste0("params.data_set = \"", p, "\""),
-      paste0("params.data_set = \"", parameters[which(parameters$group == p),]$profile, "\""),
+      paste0("profile = \"", parameters[which(parameters$group == p),]$profile, "\""),
       paste(colnames(options.tardis), '=', options.tardis)
     )
     parameter.file.name = paste0(data.dir, '/', p, '.config')
