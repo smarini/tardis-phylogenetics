@@ -42,5 +42,7 @@ for(p in unique(metadata$group)){
     parameter.file.name = paste0(data.dir, '/', p, '.config')
     writeLines(parameter.file, con=parameter.file.name)
     write(parameter.file.name, "")
+  }else{
+    write(paste0(data.dir, '/', p), "")
   }
 }
