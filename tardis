@@ -233,7 +233,8 @@ main_groups() {
 
   echo Configs: $CONFIGS
   echo No configs: $NOCONFIGS
-
+  
+  if [[ "$CONFIGS" != "" ]];
   for conf in $CONFIGS;
     do
       gprof=$(grep ^profile $conf | cut -d = -f 2 | tr -d \" )
@@ -244,15 +245,20 @@ main_groups() {
       echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $gprof $conf
            $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $grpof $conf
   done
+  fi
 
   # Now combine output files
   mkdir -p ${OUTDIR}/by.group
   mv ${OUTDIR}/* ${OUTDIR}/by.group 2>/dev/null
   cat ${OUTDIR}/by.group/subsample.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
+
+  if [[ "$NOCONFIGS" != "" ]];
+  then
   for nd in $NOCONFIGS;
   do
     cat ${nd}/aln.fa >> ${OUTDIR}/subsample.GA.final.fa
   done
+  fi
 }
 
 # Make R available in your environment, if using modules
