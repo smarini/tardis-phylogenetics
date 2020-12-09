@@ -28,7 +28,7 @@ parameters = read.csv(opt$group.parameters, stringsAsFactors=FALSE)
 for(p in unique(metadata$group)){
   data.dir = paste(opt$base.dir, 'data', p, sep = '/')
   system(paste('mkdir -p', data.dir)) # here we store stuff
-  metadata.tmp = metadata[metadata$Group %in% p,]
+  metadata.tmp = metadata[metadata$group %in% p,]
   writeXStringSet(genomes[names(genomes) %in% metadata.tmp$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
   write.csv(metadata.tmp, file = paste(data.dir, 'metadata.csv', sep = '/'), quote = FALSE, row.names = FALSE )
   
