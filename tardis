@@ -148,7 +148,7 @@ usage() {
     echo "Metadata file $INDIR/$MFILE not found!"
     exit 2
   fi
-  if [ ! -f $INDIR/$DFILE ];
+  if [[ ! -f $INDIR/$DFILE && "$GROUPFILE" == "" ]];
   then
     echo "Distances file $INDIR/$DFILE not found - generating..."
     echo Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
