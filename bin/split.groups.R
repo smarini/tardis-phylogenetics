@@ -25,17 +25,18 @@ metadata = metadata[sapply(names(genomes), function(x,df){which(metadata$Accessi
 parameters = read.csv(opt$group.parameters, stringsAsFactors=FALSE)
 
 # generate project folder
-for(p in unique(metadata$Group)){
+for(p in unique(metadata$group)){
   data.dir = paste(opt$base.dir, 'data', p, sep = '/')
   system(paste('mkdir -p', data.dir)) # here we store stuff
-  metadata.tmp = metadata[metadata$Group %in% p,]
+  metadata.tmp = metadata[metadata$group %in% p,]
   writeXStringSet(genomes[names(genomes) %in% metadata.tmp$Accession.ID], filepath = paste(data.dir, 'aln.fa', sep = '/') )
   write.csv(metadata.tmp, file = paste(data.dir, 'metadata.csv', sep = '/'), quote = FALSE, row.names = FALSE )
   
   if(p %in% parameters$group){
-    options.tardis = parameters[which(parameters$group == p),-c(which(colnames(parameters) == 'group'), which(is.na(parameters[which(parameters$group == p),]))), drop = FALSE]
+    options.tardis = parameters[which(parameters$group == p),-c(which(colnames(parameters) %in% c('profile', 'group')), which(is.na(parameters[which(parameters$group == p),]))), drop = FALSE]
     parameter.file = c(
       paste0("params.data_set = \"", p, "\""),
+      paste0("params.data_set = \"", parameters[which(parameters$group == p),]$profile, "\""),
       paste(colnames(options.tardis), '=', options.tardis)
     )
     parameter.file.name = paste0(data.dir, '/', p, '.config')
