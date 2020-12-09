@@ -235,6 +235,7 @@ main_groups() {
   echo No configs: $NOCONFIGS
   
   if [[ "$CONFIGS" != "" ]];
+  then
   for conf in $CONFIGS;
     do
       gprof=$(grep ^profile $conf | cut -d = -f 2 | tr -d \" )
