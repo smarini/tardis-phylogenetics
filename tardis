@@ -218,6 +218,7 @@ main_single() {
 main_groups() {
   CONFIGS=""
   NOCONFIGS=""
+
   for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>/dev/null);
     do
       echo $path
@@ -229,6 +230,10 @@ main_groups() {
 	      NOCONFIGS="$NOCONFIGS $path"
       esac
   done
+
+  echo Configs: $CONFIGS
+  echo No configs: $NOCONFIGS
+
   for conf in $CONFIGS;
     do
       gprof=$(grep ^profile $conf | cut -d = -f 2 | tr -d \" )
