@@ -15,7 +15,7 @@ CONFS=""
 SHINY="N"
 GROUPFILE=""
 PROF="local"
-
+LOGFILE="tardis-$(date -Iminutes).txt"
 # Colors are fun...
 B='\033[1;34m'
 Y='\033[1;33m'
@@ -152,7 +152,7 @@ usage() {
   then
     echo "Distances file $INDIR/$DFILE not found - generating..."
     echo Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE
-    Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE 2>/dev/null
+    Rscript ${TARDIS_HOME}/bin/JC.pairwise.dist.R -i $INDIR/$AFILE -d $INDIR/$DFILE 2>$LOGFILE
   fi
   echo Data directory found: $INDIR
   
@@ -219,7 +219,7 @@ main_groups() {
   CONFIGS=""
   NOCONFIGS=""
 
-  for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>/dev/null);
+  for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>$LOGFILE);
     do
       echo $path
       case $path in
