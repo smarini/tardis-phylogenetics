@@ -43,6 +43,6 @@ for(p in unique(metadata$group)){
     writeLines(parameter.file, con=parameter.file.name)
     write(parameter.file.name, "")
   }else{
-    write(paste0(data.dir, '/', p), "")
+    write(paste(data.dir), "")
   }
 }
