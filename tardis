@@ -3,8 +3,8 @@
 TARDIS_HOME=$(dirname $(readlink -nf $0))
 
 RUNDIR="."
-NGENS=10
-NBATCHES=1
+NGENS=""
+NBATCHES=""
 AFILE="aln.fa"
 DFILE="jc.distance.precalc.rds"
 MFILE="metadata.csv"
@@ -75,13 +75,13 @@ done
 		GROUPFILE=$OPTARG
 		;;
 	    b )
-		NBATCHES=$OPTARG
+		NBATCHES="--nbatches $OPTARG"
 		;;
 	    r )
 		RUNDIR=$OPTARG
 		;;
 	    n ) 
-		NGENS=$OPTARG
+		NGENS="--ngenerations $OPTARG"
 		;;
 	    a )
 		AFILE=$OPTARG
@@ -202,11 +202,11 @@ main_single() {
   else
     echo "*** Executing GA method..."
     echo nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
-             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
-             --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
-    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
-             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
-             --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
+             --outdir $OUTDIR --afile $INDIR/$AFILE
+         nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
+             --outdir $OUTDIR --afile $INDIR/$AFILE
 
     Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
     echo "*** GA done."
