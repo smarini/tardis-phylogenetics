@@ -201,6 +201,9 @@ main_single() {
     echo "*** Brute Force done."
   else
     echo "*** Executing GA method..."
+    echo nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
+             --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
     nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
              --distances $INDIR/$DFILE --metadata $INDIR/$MFILE --ngenerations $NGENS \
              --nbatches $NBATCHES --outdir $OUTDIR --afile $INDIR/$AFILE
