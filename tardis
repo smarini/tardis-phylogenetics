@@ -201,10 +201,13 @@ main_single() {
     echo "*** Brute Force done."
   else
     echo "*** Executing GA method..."
-    echo nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+    if [[ "$DEBUG" == "y" ];
+    then
+      echo nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
              --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
              --outdir $OUTDIR --afile $INDIR/$AFILE
-         nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
+    fi
+    nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
              --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
              --outdir $OUTDIR --afile $INDIR/$AFILE
 
@@ -262,8 +265,11 @@ main_groups() {
       then
         gprof="-p $gprof"
       fi
-      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
-           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $grpof $conf
+      if [[ "$DEBUG" == "y"]];
+      then
+        echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
+      fi
+      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $grpof $conf
   done
   fi
 
