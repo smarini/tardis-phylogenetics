@@ -265,7 +265,7 @@ main_groups() {
       then
         gprof="-p $gprof"
       fi
-      if [[ "$DEBUG" == "y"]];
+      if [[ "$DEBUG" == "y" ]];
       then
         echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
       fi
