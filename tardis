@@ -49,6 +49,22 @@ usage() {
     echo
 }
 
+# Make R available in your environment, if using modules
+if command -v module &> /dev/null
+then
+  module load R
+fi  
+
+# Check that required external programs are available
+for prog in Rscript nextflow;
+do
+  if ! command -v $prog &> /dev/null
+  then 
+    echo "Warning: $prog not found in path!"
+    exit 1
+  fi
+done
+
 # Parse command-line options
   while getopts ":g:p:b:r:n:a:d:m:o:xshv" opt; do
 	case ${opt} in
@@ -243,8 +259,8 @@ main_groups() {
       then
         gprof="-p $gprof"
       fi
-      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $gprof $conf
-           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR -n $NGENS -b $NBATCHES $grpof $conf
+      echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
+           $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $grpof $conf
   done
   fi
 
@@ -261,12 +277,6 @@ main_groups() {
   done
   fi
 }
-
-# Make R available in your environment, if using modules
-if command -v module &> /dev/null
-then
-  module load R
-fi  
 
 # Entry point
 
