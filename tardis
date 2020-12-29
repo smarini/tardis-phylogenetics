@@ -130,6 +130,14 @@ done
 
   shift $((OPTIND - 1))
 
+  # If running Shiny, ignore all other options and exit when done
+  if [ "$SHINY" == "Y" ];
+  then
+    echo "Starting Shiny interface, use Ctrl-c to quit."
+    Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
+    exit
+  fi
+
   if [[ "$GROUPFILE" == "" ]];
   then
     CONF=$1
@@ -181,15 +189,6 @@ done
   #rm -f ${OUTDIR}/*
 
   echo
-
-test_shiny() {
-  if [ "$SHINY" == "Y" ];
-  then
-    echo "Starting Shiny interface, use Ctrl-c to quit."
-    Rscript -e "shiny::runApp(\"${TARDIS_HOME}/shiny_local/app.R\", launch.browser = TRUE)"
-    exit
-  fi
-}
 
 main_single() {
   FASTAS=""
@@ -288,8 +287,6 @@ main_groups() {
 }
 
 # Entry point
-
-test_shiny			# this exits if successful
 
 if [ "$GROUPFILE" == "" ];
 then
