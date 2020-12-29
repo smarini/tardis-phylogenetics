@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# (c) 2020, Simone Marini, Alberto Riva, University of Florida
+
 TARDIS_HOME=$(dirname $(readlink -nf $0))
 
 RUNDIR="."
