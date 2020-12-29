@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# (c) 2020, Simone Marini, Alberto Riva, University of Florida
+# (c) 2020, Simone Marini (simone.marini@ufl.edu),
+#           Alberto Riva (ariva@ufl.edu),
+#           University of Florida
 
 TARDIS_HOME=$(dirname $(readlink -nf $0))
 
