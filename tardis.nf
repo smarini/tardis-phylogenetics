@@ -97,24 +97,24 @@ process DoIt {
         else
           fnew=${params.fracnew}; fevo=${params.fracevolved}; feli=${params.fracelite}
         fi
-	echo Rscript ${workflow.projectDir}/bin/make.gen.R \
-          --frac.new \$fnew \
-	  --frac.evo \$fevo \
-	  --frac.eli \$feli \
-	  --n.samples ${params.nsamples} \
-	  --gen.size ${params.gensize} \
-	  --tot.batches ${params.nbatches} \
-	  --n.cores ${params.ncores} \
-	  --data.set ${params.data_set} \
-          --w.div ${params.wdiv} \
-          --w.tem ${params.wtem} \
-          --generation $gen \
-          --batch $batch \
-	  --dist.opt ${params.distopt} \
-          --seeds ${workflow.launchDir}/${params.seeds} \
-	  --distance ${params.distances} \
-	  --metadata ${params.metadata} \
-	  --out.dir ${workflow.launchDir}/${params.outdir} > ${workflow.launchDir}/make.gen.${gen}.cmd
+	# echo Rscript ${workflow.projectDir}/bin/make.gen.R \
+        #   --frac.new \$fnew \
+	#   --frac.evo \$fevo \
+	#   --frac.eli \$feli \
+	#   --n.samples ${params.nsamples} \
+	#   --gen.size ${params.gensize} \
+	#   --tot.batches ${params.nbatches} \
+	#   --n.cores ${params.ncores} \
+	#   --data.set ${params.data_set} \
+        #   --w.div ${params.wdiv} \
+        #   --w.tem ${params.wtem} \
+        #   --generation $gen \
+        #   --batch $batch \
+	#   --dist.opt ${params.distopt} \
+        #   --seeds ${workflow.launchDir}/${params.seeds} \
+	#   --distance ${params.distances} \
+	#   --metadata ${params.metadata} \
+	#   --out.dir ${workflow.launchDir}/${params.outdir} > ${workflow.launchDir}/make.gen.${gen}.cmd
 	Rscript ${workflow.projectDir}/bin/make.gen.R \
           --frac.new \$fnew \
 	  --frac.evo \$fevo \
