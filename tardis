@@ -72,18 +72,18 @@ usage2() {
     echo    "  Opt | Parameter           | Description"
     echo    "  ----|---------------------|------------------------------------------"
     echo -e "      | ${B}params.data_set${N}     | Dataset name"
-    echo -e "      | ${B}params.nsamples${N}     | "
+    echo -e "      | ${B}params.nsamples${N}     | Number of genomes in each subsample"
     echo -e "      | ${B}params.gensize${N}      | Number of individuals in each generation"
     echo -e "  ${Y}-b${N}  | ${B}params.nbatches${N}     | Number of batches"
     echo -e "  ${Y}-n${N}  | ${B}params.ngenerations${N} | Number of generations to simulate"
 
-    echo -e "      | ${B}params.fracnew${N}      | Fraction of new individuals in each generation"
+    echo -e "      | ${B}params.fracnew${N}      | Fraction of newly generated individuals in each generation"
     echo -e "      | ${B}params.fracevolved${N}  | Fraction of evolved individuals in each generation"
     echo -e "      | ${B}params.fracelite${N}    | Fraction of elite individuals in each generation"
 
-    echo -e "      | ${B}params.wdiv${N}         | Diversity weight"
-    echo -e "      | ${B}params.wtem${N}         | Temporal weight"
-    echo -e "      | ${B}params.distopt${N}      | Distance operator"
+    echo -e "      | ${B}params.wdiv${N}         | Weight of the genomic diversity"
+    echo -e "      | ${B}params.wtem${N}         | Weight of the temporal distribution"
+    echo -e "      | ${B}params.distopt${N}      | Target of genomic diversity optimization (max, median, or mean)"
     echo -e "      | ${B}params.ncores${N}       | Number of processor cores to use"
     echo
 }
