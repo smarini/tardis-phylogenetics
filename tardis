@@ -31,30 +31,63 @@ N='\033[0m'
 usage() {
     echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
     echo
-    echo "Usage: tardis [options] DATASET"
+    echo "Usage: tardis [options] CONF"
     echo 
-    echo "where DATASET is the dataset name. The program assumes that the run directory (RDIR)"
-    echo "contains a configuration file called DATASET.config, and a subdirectory called data/,"
-    echo "containing in turn a subdirectory named after the dataset. The three files indicated"
-    echo "by the -a, -d, and -m options should be located in that directory."
+    echo "where CONF is the path to the configuration file. The configuration file should be named"
+    echo "DATASET.config, where DATASET is the dataset name. Use -H to see the list of parameters"
+    echo "that can be placed in the configuration file."
     echo
     echo "Options:"
     echo
     echo " -s        | Enable Shiny GUI (all other options ignored)"
     echo " -g GROUPS | Enable groups mode"
     echo " -b NBATCH | Number of batches (default: $NBATCHES)"
-    echo " -r RDIR   | Set run directory (default: current directory)" 
-    echo " -n NGENS  | Set number of generations for GA (defaut: $NGENS)"
-    echo " -a AFILE  | Name of alignment file (default: $AFILE)"
-    echo " -d DFILE  | Name of distances file (default: $DFILE)"
-    echo " -m MFILE  | Name of metadata file (default: $MFILE)"
-    echo " -o ODIR   | Name of output directory (default: output/dataset)"
+#    echo " -r RUNDIR | Set run directory (default: current directory)" 
+    echo " -n NGENS  | Set number of generations for GA (defaut: 10)"
+    echo " -a AFILE  | Name of alignment file (default: $AFILE) [*]"
+    echo " -d DFILE  | Name of distances file (default: $DFILE) [*]"
+    echo " -m MFILE  | Name of metadata file (default: $MFILE) [*]"
+    echo " -o ODIR   | Name of output directory (default: output/dataset_name)"
     echo " -p PROF   | Profile name, possible values: local, small, medium, large (default: $PROF)"
     echo " -x        | Enable debug mode (will not delete intermediate files)"
     echo " -v        | Display version number and copyright notice"
+    echo " -H        | Describe format of configuration file"
+    echo
+    echo "[*] If the default filename is used, the program assumes that the file is in the"
+    echo "    same directory as the configuration file."
     echo
 }
 
+usage2() {
+    echo -e "${Y}T${B}emporal ${Y}A${B}nd dive${Y}R${B}sity ${Y}Di${B}istribution ${Y}S${B}ampler - ${Y}TARDiS${N}"
+    echo
+    echo "The configuration file should be a text file containing parameter/value pairs in nextflow format,"
+    echo "for example:"
+    echo
+    echo -e "  ${B}params.nsamples = 4${N}"
+    echo
+    echo "The following table shows the parameters that can be placed in the configuration file, with their"
+    echo "equivalent command-line option (when present) and a brief description."
+    echo
+    echo    "  Opt | Parameter           | Description"
+    echo    "  ----|---------------------|------------------------------------------"
+    echo -e "      | ${B}params.data_set${N}     | Dataset name"
+    echo -e "      | ${B}params.nsamples${N}     | "
+    echo -e "      | ${B}params.gensize${N}      | Number of individuals in each generation"
+    echo -e "  ${Y}-b${N}  | ${B}params.nbatches${N}     | Number of batches"
+    echo -e "  ${Y}-n${N}  | ${B}params.ngenerations${N} | Number of generations to simulate"
+
+    echo -e "      | ${B}params.fracnew${N}      | Fraction of new individuals in each generation"
+    echo -e "      | ${B}params.fracevolved${N}  | Fraction of evolved individuals in each generation"
+    echo -e "      | ${B}params.fracelite${N}    | Fraction of elite individuals in each generation"
+
+    echo -e "      | ${B}params.wdiv${N}         | Diversity weight"
+    echo -e "      | ${B}params.wtem${N}         | Temporal weight"
+    echo -e "      | ${B}params.distopt${N}      | Distance operator"
+    echo -e "      | ${B}params.ncores${N}       | Number of processor cores to use"
+    echo
+}
+  
 # Make R available in your environment, if using modules
 if command -v module &> /dev/null
 then
@@ -62,7 +95,7 @@ then
 fi  
 
 # Parse command-line options
-  while getopts ":g:p:b:r:n:a:d:m:o:xshv" opt; do
+  while getopts ":g:p:b:r:n:a:d:m:o:xshHv" opt; do
 	case ${opt} in
 	    s )
 		SHINY="Y"
@@ -110,6 +143,10 @@ fi
 	    
 	    h )
 		usage
+		exit 0
+		;;
+	    H )
+		usage2
 		exit 0
 		;;
 	    \? )
