@@ -1,5 +1,6 @@
 output/example
 shiny_local/output
+shiny_local/.Rhistory
 paper
 bin/.Rhistory
 .Rhistory
