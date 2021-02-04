@@ -2,7 +2,7 @@
 Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 
 # Quick start
-Download TARDis and make sure [dependencies](#Dependendencies-and-OS) are installed. For the quickest start, just run our example:
+Download TARDis and make sure [dependencies](#dependencies-and-os) are installed. For the quickest start, just run our example:
 
 `[path/to/tardis]/tardis -s`
 
@@ -23,8 +23,8 @@ In an early, simplified version, TARDiS principles were also applied in:
 # Running TARDiS
 To run TARDiS, you will need the following inputs:
 
-* A genomic sequence alignment in fasta format (example: `data/example/aln.fa`);
-* A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example: `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files.
+* A genomic sequence alignment in fasta format (example: `data/example/aln.fa`)
+* A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example: `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files
 * A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example: `data/example/metadata.csv`)
 
 ## GUI
@@ -66,11 +66,11 @@ The default NextFlow execution profile (option -p) is "local", which uses the lo
 ### Group mode
 TARDiS can be run in group mode (option -g) from the command line. This is useful when the user has a large genomes file, with genomes pertaining to different groups, to be subsampled independently and combined into a single output at the end. For example, groups could correspond to different geographical regions. 
 In this case, the config file will be in comma-delimited format, with one row for each group. Note that for group mode config files:
-* Column names are [parameter names](#parameters);
-* A special group column, called `group`, needs to be present, with a different value in each line;
-* The execution profile can be specified in the group mode file config in the "profile" column (this is not possible in a single run [config file](#config-file));
-* `NAs` are accepted (default values will be used);
-* Groups that are NOT listed in the group-mode config file will be included in the final output as a whole, without being subsampled.
+* Column names are [parameter names](#config-file)
+* A special group column, called `group`, needs to be present, with a different value in each line
+* The execution profile can be specified in the group mode file config in the "profile" column (this is not possible in a single run config file
+* `NAs` are accepted (default values will be used)
+* Groups that are NOT listed in the group-mode config file will be included in the final output as a whole, without being subsampled
 
 Also note that the metadata file needs to include a `group` column to identify the group of each genome.
 A working toy example is provided in `data/example_group`. There are three groups, a, b, and c. While groups a and b will be subsampled, the whole group c (absent from the config file) will be included in the output without being subsampled.
@@ -117,3 +117,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 See <https://www.gnu.org/licenses/>.
+

@@ -45,7 +45,7 @@ ui <- fluidPage(
            verbatimTextOutput("n.gen") ),
     
     column( 3, offset = 0,
-           numericInput("w.div", "Genomic diversity weight", 0.5, min = 0, max = 1, step = 0.01),
+           numericInput("w.div", "Genetic diversity weight", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_div"),  
            numericInput("w.tem", "Temporal diversity weight:", 0.5, min = 0, max = 1, step = 0.01),
            verbatimTextOutput("w_tem"),

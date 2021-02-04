@@ -41,6 +41,12 @@ if(grepl("\\.rds$", opt$distance) | grepl("\\.RDS$", opt$distance)){
 mean.d = mean(dist.m)
 median.d = median(dist.m)
 sd.d = sd(dist.m)
+sd.up = mean.d+sd.d
+if(mean.d-sd.d>0){
+  sd.down = mean.d-sd.d
+}else{
+  sd.down = 0
+}
 
 fitnesses = NULL
 indeces = NULL
@@ -75,8 +81,8 @@ p.gen.div <- ggplot(df.to.plot[df.to.plot$group %in% c('mean genetic diversity',
   geom_line() +
   geom_point() +
   geom_hline(yintercept=mean.d) +
-  geom_hline(yintercept=mean.d+sd.d, linetype="dashed") +
-  geom_hline(yintercept=min(mean.d-sd.d, 0), linetype="dashed") +
+  geom_hline(yintercept=sd.up, linetype="dashed") +
+  geom_hline(yintercept=sd.down, linetype="dashed") +
   geom_hline(yintercept=median.d, color='cornflowerblue') +
   geom_text(aes(x=0, y = 0.9*median.d), label="Median", color='cornflowerblue', size=3, nudge_x = 0.5) +
   geom_text(aes(x=0, y = 0.9*mean.d), label="Mean", size=3, nudge_x = 0.5, color = 'black') +
