@@ -9,7 +9,7 @@ Download TARDis and make sure [dependencies](#dependencies-and-os) are installed
 and the TARDiS explorer GUI will open in your default browser. Retrieve example data in `data/example` and click on `Run Tardis`.
 
 # Yes but what does TARDiS do exactly?
-TARDiS subsamples genomic data sets optimizing genomic diversity and temporal sampling according to parameters set by the users. The optimization is driven by a genetic algorithm.
+TARDiS subsamples genetic data sets optimizing genetic diversity and temporal sampling according to parameters set by the users. The optimization is driven by a genetic algorithm.
 
 # Citation
 A paper describing TARDiS principles and application is
@@ -23,8 +23,8 @@ In an early, simplified version, TARDiS principles were also applied in:
 # Running TARDiS
 To run TARDiS, you will need the following inputs:
 
-* A genomic sequence alignment in fasta format (example: `data/example/aln.fa`)
-* A distance matrix, i.e., a square matrix where you stored the genomic distances for you genomic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example: `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files
+* A genetic sequence alignment in fasta format (example: `data/example/aln.fa`)
+* A distance matrix, i.e., a square matrix where you stored the genetic distances for you genetic sequence pairs. It can be a csv or rds file. Rows and columns should be named as the fasta headers (example: `data/example/jc.distance.precalc.csv`). Note that this function works for *aligned* fasta files
 * A metadata file in csv format. This file should include two columns, `Accession.ID`, with the fasta headers, and `Collection.date`, with the sampling date in the dd/mm/YYYY format (example: `data/example/metadata.csv`)
 
 ## GUI
@@ -32,7 +32,7 @@ For experimenting with TARDiS, you can run the GUI as explained [above](#quick-s
 
 ![GUI](/shiny_local/gui.png)
 
-Important: **this GUI is intended for experimenting with small sets**, and small GA populations. All the GUI outputs are stored as `shiny_local/output/jc.distance.precalc.rds`. If you don't have a distance file, the `Jukes-Cantor distance` calculates the genomic distance. This distance files is to used as part of the TARDiS input. For larger data sets, please use the command line version instead. 
+Important: **this GUI is intended for experimenting with small sets**, and small GA populations. All the GUI outputs are stored as `shiny_local/output/jc.distance.precalc.rds`. If you don't have a distance file, the `Jukes-Cantor distance` calculates the genetic distance. This distance files is to used as part of the TARDiS input. For larger data sets, please use the command line version instead. 
 
 ## Command line (requires [Nextflow](https://www.nextflow.io/))
 You can run TARDiS from the command line as follows:
@@ -58,7 +58,7 @@ params.wdiv = 1
 params.wtem = 1
 params.distopt = "max"
 ```
-Settable parameters in the config file are: params.data_set (name of the data set), params.nsamples (number of genomes in the subsample), params.gensize (size of the generation per batch, see [below](#batches), default 1 batch), params.nbatches (number of batches, see below), params.ncores (number of cores for parallel computing), params.ngenerations (number of generations), params.fracnew (fraction of newly generated individuals per generation), params.fracevolved (fraction of evolved individuals per generation), params.fracelite (fraction of elite individuals per generation; elite individuals are the ones with the highest fitness, to be copied as they are in the new generation), params.wdiv (weight of the genomic diversity), params.wtem (weight of the time distribution), params.distopt (target of genomic diversity optimization, "max", "median", or "mean" of the initial population).
+Settable parameters in the config file are: params.data_set (name of the data set), params.nsamples (number of genomes in the subsample), params.gensize (size of the generation per batch, see [below](#batches), default 1 batch), params.nbatches (number of batches, see below), params.ncores (number of cores for parallel computing), params.ngenerations (number of generations), params.fracnew (fraction of newly generated individuals per generation), params.fracevolved (fraction of evolved individuals per generation), params.fracelite (fraction of elite individuals per generation; elite individuals are the ones with the highest fitness, to be copied as they are in the new generation), params.wdiv (weight of the genetic diversity), params.wtem (weight of the time distribution), params.distopt (target of genetic diversity optimization, "max", "median", or "mean" of the initial population).
 
 ### HPC and resource allocation
 The default NextFlow execution profile (option -p) is "local", which uses the local machine directly. In an HPC environment, you can use the "small" (5 GB), "medium" (30 GB), or "large" (128 GB) profiles, which assume the presence of the SLURM scheduler.
