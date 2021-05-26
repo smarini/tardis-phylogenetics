@@ -4,7 +4,7 @@ Temporal And diveRsity Distribution Sampler (TARDiS) for Phylogenetics
 # Quick start
 Download TARDis and make sure [dependencies](#dependencies-and-os) are installed. For the quickest start, just run our example:
 
-`[path/to/tardis]/tardis -s`
+`[path/to/tardis]/./tardis -s`
 
 and the TARDiS explorer GUI will open in your default browser. Retrieve example data in `data/example` and click on `Run Tardis`.
 
@@ -74,6 +74,14 @@ In this case, the config file will be in comma-delimited format, with one row fo
 
 Also note that the metadata file needs to include a `group` column to identify the group of each genome.
 A working toy example is provided in `data/example_group`. There are three groups, a, b, and c. While groups a and b will be subsampled, the whole group c (absent from the config file) will be included in the output without being subsampled.
+
+To run the aforementioned group example, run
+
+```
+/tardis -g data/example_group/parameters.group.csv -m data/example_group/metadata.group.csv -a data/example_group/aln.group.fa
+```
+
+
 
 ### Batches
 To ease the calculation burden for large populations, data can be split into batches. Remember that params.gensize defines the number of individuals per batch, while params.nbatches
