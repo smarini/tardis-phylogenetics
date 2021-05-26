@@ -71,6 +71,7 @@ In this case, the config file will be in comma-delimited format, with one row fo
 * The execution profile can be specified in the group mode file config in the "profile" column (this is not possible in a single run config file
 * `NAs` are accepted (default values will be used)
 * Groups that are NOT listed in the group-mode config file will be included in the final output as a whole, without being subsampled
+* The process will also create separate folders, one per group, with the sliced group files: alignment, distance, and metadata.
 
 Also note that the metadata file needs to include a `group` column to identify the group of each genome.
 A working toy example is provided in `data/example_group`. There are three groups, a, b, and c. While groups a and b will be subsampled, the whole group c (absent from the config file) will be included in the output without being subsampled.
@@ -78,7 +79,7 @@ A working toy example is provided in `data/example_group`. There are three group
 To run the aforementioned group example, run
 
 ```
-/tardis -g data/example_group/parameters.group.csv -m data/example_group/metadata.group.csv -a data/example_group/aln.group.fa
+./tardis -g data/example_group/parameters.group.csv -m data/example_group/metadata.group.csv -a data/example_group/aln.group.fa
 ```
 
 
