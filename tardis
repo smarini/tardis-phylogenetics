@@ -312,7 +312,7 @@ main_groups() {
       then
         echo $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
       fi
-      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $grpof $conf
+      $0 -r $RUNDIR -a aln.fa -m metadata.csv -d $DFILE -o $OUTDIR $gprof $conf
   done
   fi
 
