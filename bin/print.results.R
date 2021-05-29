@@ -11,7 +11,7 @@ option_list = list(
               help="dataset name"),
   make_option(c("-d", "--distances"), type="character", default='jc.distance.precalc.csv', 
               help="genome distance matrix file name, should be an csv"),
-  make_option(c("--generations"), type="numeric", default=10, 
+  make_option(c("--ngenerations"), type="numeric", default=10, 
               help="number of generations"),
   make_option(c("--nbatches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
