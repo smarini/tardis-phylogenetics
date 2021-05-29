@@ -7,19 +7,19 @@ library(gridExtra)
 args = commandArgs(trailingOnly=TRUE)
 
 option_list = list(
-  make_option(c("-s", "--data.set"), type="character", default="example.dataset", 
+  make_option(c("-s", "--data_set"), type="character", default="example.dataset", 
               help="dataset name"),
-  make_option(c("-d", "--distance"), type="character", default='jc.distance.precalc.csv', 
+  make_option(c("-d", "--distances"), type="character", default='jc.distance.precalc.csv', 
               help="genome distance matrix file name, should be an csv"),
   make_option(c("--generations"), type="numeric", default=10, 
               help="number of generations"),
-  make_option(c("--n.batches"), type="numeric", default=1, 
+  make_option(c("--nbatches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
   make_option(c("--metadata"), type="character", default='metadata.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format"),
-  make_option(c("--dist.opt"), type="character", default="max", 
+  make_option(c("--distopt"), type="character", default="max", 
               help="Genetic distance optimized towards its highest/average point"),
-  make_option(c("--out.dir"), type="character", default=getwd(), 
+  make_option(c("--outdir"), type="character", default=getwd(), 
               help="output directory")
               )
 
