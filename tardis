@@ -14,6 +14,7 @@ DFILE="jc.distance.precalc.rds"
 MFILE="metadata.csv"
 OUTDIR=""
 MODE="GA"
+DISTOPT="max"
 DEBUG=""
 CONFS=""
 SHINY="N"
@@ -39,19 +40,20 @@ usage() {
     echo
     echo "Options:"
     echo
-    echo " -s        | Enable Shiny GUI (all other options ignored)"
-    echo " -g GROUPS | Enable groups mode"
-    echo " -b NBATCH | Number of batches (default: $NBATCHES)"
+    echo " -s         | Enable Shiny GUI (all other options ignored)"
+    echo " -g GROUPS  | Enable groups mode"
+    echo " -b NBATCH  | Number of batches (default: $NBATCHES)"
 #    echo " -r RUNDIR | Set run directory (default: current directory)" 
-    echo " -n NGENS  | Set number of generations for GA (defaut: 10)"
-    echo " -a AFILE  | Name of alignment file (default: $AFILE) [*]"
-    echo " -d DFILE  | Name of distances file (default: $DFILE) [*]"
-    echo " -m MFILE  | Name of metadata file (default: $MFILE) [*]"
-    echo " -o ODIR   | Name of output directory (default: output/dataset_name)"
-    echo " -p PROF   | Profile name, possible values: local, small, medium, large (default: $PROF)"
-    echo " -x        | Enable debug mode (will not delete intermediate files)"
-    echo " -v        | Display version number and copyright notice"
-    echo " -H        | Describe format of configuration file"
+    echo " -n NGENS   | Set number of generations for GA (defaut: 10)"
+    echo " -a AFILE   | Name of alignment file (default: $AFILE) [*]"
+    echo " -d DFILE   | Name of distances file (default: $DFILE) [*]"
+    echo " -m MFILE   | Name of metadata file (default: $MFILE) [*]"
+    echo " -o ODIR    | Name of output directory (default: output/dataset_name)"
+    echo " -t DISTOPT | Genetic diversity optimization, possible values: max, mean, median (default: $DISTOPT)"
+    echo " -p PROF    | Profile name, possible values: local, small, medium, large (default: $PROF)"
+    echo " -x         | Enable debug mode (will not delete intermediate files)"
+    echo " -v         | Display version number and copyright notice"
+    echo " -H         | Describe format of configuration file"
     echo
     echo "[*] If the default filename is used, the program assumes that the file is in the"
     echo "    same directory as the configuration file."
@@ -95,7 +97,7 @@ then
 fi  
 
 # Parse command-line options
-  while getopts ":g:p:b:r:n:a:d:m:o:xshHv" opt; do
+  while getopts ":g:p:b:r:n:a:d:m:t:o:xshHv" opt; do
 	case ${opt} in
 	    s )
 		SHINY="Y"
@@ -113,6 +115,8 @@ fi
 	    n ) 
 		NGENS="--ngenerations $OPTARG"
 		;;
+	    t )
+		DISTOPT="--distopt $DISTOPT"
 	    a )
 		AFILE=$OPTARG
 		;;
@@ -247,14 +251,15 @@ main_single() {
     if [[ "$DEBUG" == "y" ]];
     then
       echo nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
-             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES $DISTOPT \
              --outdir $OUTDIR --afile $INDIR/$AFILE
     fi
     nextflow run ${TARDIS_HOME}/tardis.nf -c $CONF -N ${USER}@ufl.edu -profile $PROF \
-             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES \
+             --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES $DISTOPT \
              --outdir $OUTDIR --afile $INDIR/$AFILE
 
-    Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --out.dir $OUTDIR >& R.log
+    Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --outdir $OUTDIR 
+             --distances $INDIR/$DFILE $NBATCHES $NGENS $DISTOPT >& R.log
     echo "*** GA done."
     echo
   fi
