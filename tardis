@@ -117,6 +117,7 @@ fi
 		;;
 	    t )
 		DISTOPT="--distopt $DISTOPT"
+		;;
 	    a )
 		AFILE=$OPTARG
 		;;
