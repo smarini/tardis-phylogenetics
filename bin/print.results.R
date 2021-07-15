@@ -53,7 +53,7 @@ indeces = NULL
 
 df.to.plot = data.frame(generation=numeric(), value=numeric(), group=character(), stringsAsFactors = FALSE)
 
-for(g in 1:opt$generations-1){
+for(g in 1:opt$ngenerations-1){
   gen.output = NULL
   for (i in 1:opt$n.batches){
     in.file = paste0(opt$out.dir, '/GA.', opt$data.set, '.', g, '.', i)
