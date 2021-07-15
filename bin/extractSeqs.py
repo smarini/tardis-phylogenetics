@@ -23,9 +23,8 @@ from `directory', and return the top `nsubsamples' ones."""
                     allfitnesses.append([ ftns[i], samples ])
 
     allfitnesses.sort(key=lambda e:e[0], reverse=True)
-    # print(allfitnesses)
-    
-    return [ f[1] for f in allfitnesses[:nsubsamples] ]
+    res = [ f[1] for f in allfitnesses[:1] ]
+    return res
 
 def readIDs(idsfile):
     ids = []
@@ -90,12 +89,13 @@ def main(args):
 
     indeces = readFitnesses(outdir, generation, batches, nsubsamples, label)
     outfiles = []
-    print(indeces)
-    print(nsubsamples)
-    for i in range(nsubsamples):
-        outfile = "{}/subsample.{}.{}.fa".format(outdir, label, i+1)
+    #print(indeces)
+    #print(nsubsamples)
+    i = 1
+    for idxs in indeces:
+        outfile = "{}/subsample.{}.{}.fa".format(outdir, label, i)
         outfiles.append(outfile)
-        extractSeqs(fasta, outfile, indeces[i])
+        extractSeqs(fasta, outfile, idxs)
     sys.stdout.write(" ".join(outfiles) + "\n")
 
 if __name__ == "__main__":
