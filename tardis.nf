@@ -29,6 +29,7 @@ batches = Channel.from(1..params.nbatches)
 
 process Init {
 	executor "local"
+	memory "1G"
 
 	input:
 	val zero from init
@@ -58,6 +59,7 @@ generations = start.concat(igens).concat(endg)
 
 process Generation {
 	executor "local"
+	memory "1G"
 
 	input: 
 	val gen from generations
@@ -143,6 +145,7 @@ Channel
 
 process Collect {
 	executor "local"
+	memory "1G"
 
 	input:
 	tuple gen, batches from gensummary
@@ -158,6 +161,7 @@ process Collect {
 
 process Conclusion {
 	executor "local"
+	memory "1G"
 
 	input:
 	val gen from terminate
