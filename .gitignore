@@ -1,3 +1,5 @@
+.nextflow.log
+tardis-2021*
 output/example
 shiny_local/output
 shiny_local/.Rhistory

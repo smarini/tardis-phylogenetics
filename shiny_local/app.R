@@ -270,11 +270,11 @@ server <- function(input, output, session) {
                                        gen.file(),
                                        input$n.gen-1,
                                        1, # n.batches
-                                       100,
+                                       42,
                                        paste('GA', data.set(), sep = '.'))
                                  )
           system(command.extractseqs)
-          print(paste0('rm -f ', output.directory(), '/*indeces* ', output.directory(), '/*fitness*'))
+          
           system(paste0('rm -f ', output.directory(), '/*indeces* ', output.directory(), '/*fitness*'))
           return("Done")
         }else{
