@@ -1,0 +1,124 @@
+Jul-19 15:01:13.427 [main] DEBUG nextflow.cli.Launcher - $> nextflow run /home/dottornomade/github/tardis-phylogenetics/tardis.nf -c ./data/a/a.config -N dottornomade@ufl.edu -profile small --distances /home/dottornomade/github/tardis-phylogenetics/data/a/jc.distance.precalc.rds --metadata /home/dottornomade/github/tardis-phylogenetics/data/a/metadata.csv max --outdir output/ --afile /home/dottornomade/github/tardis-phylogenetics/data/a/aln.fa
+Jul-19 15:01:13.604 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 20.10.0
+Jul-19 15:01:13.626 [main] INFO  nextflow.cli.CmdRun - Launching `/home/dottornomade/github/tardis-phylogenetics/tardis.nf` [suspicious_kowalevski] - revision: f96af44dec
+Jul-19 15:01:13.674 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /home/dottornomade/github/tardis-phylogenetics/nextflow.config
+Jul-19 15:01:13.677 [main] DEBUG nextflow.config.ConfigBuilder - User config file: /home/dottornomade/github/tardis-phylogenetics/./data/a/a.config
+Jul-19 15:01:13.678 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/dottornomade/github/tardis-phylogenetics/nextflow.config
+Jul-19 15:01:13.678 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /home/dottornomade/github/tardis-phylogenetics/data/a/a.config
+Jul-19 15:01:13.702 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `small`
+Jul-19 15:01:14.438 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `small`
+Jul-19 15:01:14.471 [main] DEBUG nextflow.config.ConfigBuilder - Available config profiles: [small, large, medium, local]
+Jul-19 15:01:14.565 [main] DEBUG nextflow.Session - Session uuid: d0dc4585-460d-44ae-aade-7742de1094ed
+Jul-19 15:01:14.565 [main] DEBUG nextflow.Session - Run name: suspicious_kowalevski
+Jul-19 15:01:14.566 [main] DEBUG nextflow.Session - Executor pool size: 8
+Jul-19 15:01:14.604 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 20.10.0 build 5430
+  Created: 01-11-2020 15:14 UTC (10:14 EDT)
+  System: Linux 5.4.0-53-generic
+  Runtime: Groovy 3.0.5 on OpenJDK 64-Bit Server VM 11.0.11+9-Ubuntu-0ubuntu2.20.04
+  Encoding: UTF-8 (UTF-8)
+  Process: 26746@agressive-joe-reborn [127.0.1.1]
+  CPUs: 8 - Mem: 15.5 GB (8.2 GB) - Swap: 14.9 GB (14.9 GB)
+Jul-19 15:01:14.630 [main] DEBUG nextflow.Session - Work-dir: /home/dottornomade/github/tardis-phylogenetics/work [ext2/ext3]
+Jul-19 15:01:14.686 [main] DEBUG nextflow.Session - Observer factory: TowerFactory
+Jul-19 15:01:14.688 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Jul-19 15:01:15.410 [main] DEBUG nextflow.Session - Session start invoked
+Jul-19 15:01:15.935 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Jul-19 15:01:15.945 [main] DEBUG nextflow.Session - Workflow process names [dsl1]: Init, Generation, Collect, DoIt, Conclusion
+Jul-19 15:01:16.037 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Jul-19 15:01:16.037 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jul-19 15:01:16.041 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Jul-19 15:01:16.049 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=8; memory=15.5 GB; capacity=8; pollInterval=100ms; dumpInterval=5m
+Jul-19 15:01:16.205 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Jul-19 15:01:16.206 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jul-19 15:01:16.245 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: slurm
+Jul-19 15:01:16.245 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'slurm'
+Jul-19 15:01:16.256 [main] DEBUG nextflow.executor.Executor - [warm up] executor > slurm
+Jul-19 15:01:16.260 [main] DEBUG n.processor.TaskPollingMonitor - Creating task monitor for executor 'slurm' > capacity: 100; pollInterval: 5s; dumpInterval: 5m 
+Jul-19 15:01:16.262 [main] DEBUG n.executor.AbstractGridExecutor - Creating executor 'slurm' > queue-stat-interval: 1m
+Jul-19 15:01:16.280 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Jul-19 15:01:16.280 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jul-19 15:01:16.287 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: local
+Jul-19 15:01:16.288 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Jul-19 15:01:16.297 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Jul-19 15:01:16.297 [main] DEBUG nextflow.Session - Session await
+Jul-19 15:01:16.369 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jul-19 15:01:16.376 [Task submitter] INFO  nextflow.Session - [a4/2a9ff2] Submitted process > Init (1)
+Jul-19 15:01:16.636 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: Init (1); status: COMPLETED; exit: 0; error: -; workDir: /home/dottornomade/github/tardis-phylogenetics/work/a4/2a9ff204efed6dab1e7f5049ee0ead]
+Jul-19 15:01:16.672 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Jul-19 15:01:16.674 [Task submitter] INFO  nextflow.Session - [c2/805d0d] Submitted process > Generation (1)
+Jul-19 15:01:16.699 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 2; name: Generation (1); status: COMPLETED; exit: 0; error: -; workDir: /home/dottornomade/github/tardis-phylogenetics/work/c2/805d0d159a5d13a5acc41f439d6397]
+Jul-19 15:01:16.941 [Task submitter] DEBUG nextflow.processor.TaskRun - Unable to dump error of process 'null' -- Cause: java.nio.file.NoSuchFileException: /home/dottornomade/github/tardis-phylogenetics/work/f5/47965ddecff773193ec76150c908f8/.command.log
+Jul-19 15:01:16.942 [Task submitter] ERROR nextflow.processor.TaskProcessor - Error executing process > 'DoIt (1)'
+
+Caused by:
+  Cannot run program "sbatch" (in directory "/home/dottornomade/github/tardis-phylogenetics/work/f5/47965ddecff773193ec76150c908f8"): error=2, No such file or directory
+
+Command executed:
+
+  sbatch .command.run
+
+Command exit status:
+  -
+
+Command output:
+  (empty)
+
+Work dir:
+  /home/dottornomade/github/tardis-phylogenetics/work/f5/47965ddecff773193ec76150c908f8
+
+Tip: when you have fixed the problem you can continue the execution adding the option `-resume` to the run command line
+Jul-19 15:01:16.946 [Task submitter] DEBUG nextflow.Session - Session aborted -- Cause: Error submitting process 'DoIt (1)' for execution
+Jul-19 15:01:16.964 [Task submitter] DEBUG nextflow.Session - The following nodes are still active:
+[process] Generation
+  status=ACTIVE
+  port 0: (queue) OPEN  ; channel: gen
+  port 1: (cntrl) -     ; channel: $
+
+[process] DoIt
+  status=ACTIVE
+  port 0: (queue) OPEN  ; channel: -
+  port 1: (cntrl) -     ; channel: $
+
+[process] Collect
+  status=ACTIVE
+  port 0: (queue) OPEN  ; channel: -
+  port 1: (cntrl) -     ; channel: $
+
+[process] Conclusion
+  status=ACTIVE
+  port 0: (queue) OPEN  ; channel: gen
+  port 1: (cntrl) -     ; channel: $
+
+Jul-19 15:01:16.965 [main] DEBUG nextflow.Session - Session await > all process finished
+Jul-19 15:01:16.966 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Jul-19 15:01:17.173 [main] WARN  nextflow.script.WorkflowMetadata - Failed to deliver notification email -- See the log file for details
+java.lang.IllegalArgumentException: Cannot send email message -- Make sure you have installed `sendmail` or `mail` program or configure a mail SMTP server in the nextflow config file
+	at nextflow.mail.Mailer.send(Mailer.groovy:446)
+	at nextflow.script.WorkflowNotifier.sendNotification(WorkflowNotifier.groovy:72)
+	at nextflow.script.WorkflowMetadata.safeMailNotification(WorkflowMetadata.groovy:455)
+	at nextflow.script.WorkflowMetadata.invokeOnComplete(WorkflowMetadata.groovy:391)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at org.codehaus.groovy.reflection.CachedMethod.invoke(CachedMethod.java:107)
+	at groovy.lang.MetaMethod.doMethodInvoke(MetaMethod.java:323)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1259)
+	at groovy.lang.MetaClassImpl.invokeMethod(MetaClassImpl.java:1026)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokePogoMethod(InvokerHelper.java:1029)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethod(InvokerHelper.java:1012)
+	at org.codehaus.groovy.runtime.InvokerHelper.invokeMethodSafe(InvokerHelper.java:101)
+	at nextflow.script.WorkflowMetadata$_closure3.doCall(WorkflowMetadata.groovy:246)
+	at nextflow.script.WorkflowMetadata$_closure3.call(WorkflowMetadata.groovy)
+	at nextflow.Session.shutdown0(Session.groovy:653)
+	at nextflow.Session.destroy(Session.groovy:605)
+	at nextflow.script.ScriptRunner.terminate(ScriptRunner.groovy:229)
+	at nextflow.script.ScriptRunner.execute(ScriptRunner.groovy:129)
+	at nextflow.cli.CmdRun.run(CmdRun.groovy:277)
+	at nextflow.cli.Launcher.run(Launcher.groovy:466)
+	at nextflow.cli.Launcher.main(Launcher.groovy:648)
+Jul-19 15:01:17.174 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=2; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=1; submittedCount=0; runningCount=-1; retriesCount=0; abortedCount=0; succeedDuration=175ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=-1; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=1 GB; ]
+Jul-19 15:01:17.180 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Jul-19 15:01:17.187 [main] DEBUG nextflow.util.SpuriousDeps - AWS S3 uploader shutdown
+Jul-19 15:01:17.203 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

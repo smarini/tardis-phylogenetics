@@ -13,12 +13,12 @@ option_list = list(
               help="genome distance matrix file name, should be an csv"),
   make_option(c("--ngenerations"), type="numeric", default=10, 
               help="number of generations"),
-  make_option(c("--nbatches"), type="numeric", default=1, 
+  make_option(c("--n.batches"), type="numeric", default=1, 
               help="number of overall batches per generation"),
   make_option(c("--metadata"), type="character", default='metadata.csv', 
               help="metadata file, should be a csv with the date column called Collection.date in the %d/%m/%Y format"),
-  make_option(c("--distopt"), type="character", default="max", 
-              help="Genetic distance optimized towards its highest/average point"),
+  # make_option(c("--distopt"), type="character", default="max", 
+  #             help="Genetic distance optimized towards its highest/average point"),
   make_option(c("--outdir"), type="character", default=getwd(), 
               help="output directory")
               )
@@ -28,10 +28,10 @@ opt = parse_args(opt_parser);
 
 metadata = read.table(opt$metadata, sep = ',', stringsAsFactors = FALSE, header = TRUE)
 
-if(grepl("\\.rds$", opt$distance) | grepl("\\.RDS$", opt$distance)){
-  dist.m = readRDS(opt$distance)
+if(grepl("\\.rds$", opt$distances) | grepl("\\.RDS$", opt$distances)){
+  dist.m = readRDS(opt$distances)
 }else{
-  dist.m = scan(opt$distance, sep = ',', what=character())
+  dist.m = scan(opt$distances, sep = ',', what=character())
   dist.m = matrix(dist.m, nrow=dim(metadata)[1]+1)
   genome.names <- dist.m[1,2:dim(dist.m)[1]]
   dist.m = apply((dist.m[2:dim(dist.m)[1],2:dim(dist.m)[1]]), 1, as.numeric)
@@ -56,7 +56,7 @@ df.to.plot = data.frame(generation=numeric(), value=numeric(), group=character()
 for(g in 1:opt$ngenerations-1){
   gen.output = NULL
   for (i in 1:opt$n.batches){
-    in.file = paste0(opt$out.dir, '/GA.', opt$data.set, '.', g, '.', i)
+    in.file = paste0(opt$outdir, '/GA.', opt$data_set, '.', g, '.', i)
 
     tmp = as.matrix(read.csv(paste(in.file, 'indeces.fitness.csv', sep = '.'), sep = ','))
     gen.output = cbind(gen.output, tmp)
@@ -66,7 +66,7 @@ for(g in 1:opt$ngenerations-1){
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[2,]), group='mean genetic diversity')
   df.to.plot = df.to.plot %>% add_row(generation=g, value=mean(gen.output[3,]), group='mean temporal spread')
   }
-out.file = paste0(opt$out.dir, '/', opt$data.set, '.per.gen.stats')
+out.file = paste0(opt$outdir, '/', opt$data_set, '.per.gen.stats')
 write.csv(df.to.plot, paste(out.file, 'csv', sep = '.'), quote = FALSE, row.names = FALSE)
 
 p.fit <- ggplot(df.to.plot[df.to.plot$group %in% c('mean fitness', 'best fitness'),], aes(x=generation, y=value, colour=group)) + 

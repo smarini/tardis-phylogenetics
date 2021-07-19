@@ -31,8 +31,9 @@ ui <- fluidPage(
            verbatimTextOutput("gen.size"),
            numericInput("n.cores", "Number of cores", 1, min = 1, max = 8),
            verbatimTextOutput("n.cores"),
-           numericInput("n.subsamples", "Subsamples to consider", 3, min = 1, max = 10),
-           verbatimTextOutput("n.subsamples")),
+           # numericInput("n.subsamples", "Subsamples to consider", 1, min = 1, max = 10),
+           # verbatimTextOutput("n.subsamples")
+           ),
     
     column( 3, offeset = 0,
            numericInput("frac.new", "Fraction of random individuals", 0.05, min = 0, max = 1, step = 0.01),
@@ -214,7 +215,7 @@ server <- function(input, output, session) {
                            "--dist.opt", input$dist.opt,
                            "--n.samples", input$n.samples,
                            "--n.cores", input$n.cores,
-                           "--basedir", '../',
+#                           "--basedir", '../',
                            "--w.tem", input$w.tem,
                            "--w.div", input$w.div,
                            "--seeds", "../data/seeds.txt",
@@ -239,7 +240,7 @@ server <- function(input, output, session) {
                              "--gen.size", input$gen.size,
                              "--n.samples", input$n.samples,
                              "--n.cores", input$n.cores,
-                             "--basedir", '../',
+#                             "--basedir", '../',
                              "--w.tem", input$w.tem,
                              "--w.div", input$w.div,
                              "--seeds", "../data/seeds.txt",
@@ -254,13 +255,13 @@ server <- function(input, output, session) {
         if(all(file.exists(paste0(output.directory(), "/GA.", data.set(), ".", 0:(input$n.gen-1), ".1.indeces.fitness.csv")),
                file.exists(paste0(output.directory(), "/GA.", data.set(), ".", 0:(input$n.gen-1), ".1.indeces.subsamples.csv"))
                )){
-          
+
           system(paste("Rscript ../bin/print.results.R",
-                       "--distance", distance(),
+                       "--distances", distance(),
                        "--n.batches 1",
-                       "--generations", input$n.gen,
-                       "--out.dir", output.directory(),
-                       "--data.set", data.set(),
+                       "--ngenerations", input$n.gen,
+                       "--outdir", output.directory(),
+                       "--data_set", data.set(),
                        "--metadata", metadata()
                          ) )
           message("Reports and results printed")
@@ -269,12 +270,15 @@ server <- function(input, output, session) {
                                        gen.file(),
                                        input$n.gen-1,
                                        1, # n.batches
-                                       input$n.subsamples,
-                                       paste('GA', data.set(), sep = '.')))
+                                       100,
+                                       paste('GA', data.set(), sep = '.'))
+                                 )
           system(command.extractseqs)
+          print(paste0('rm -f ', output.directory(), '/*indeces* ', output.directory(), '/*fitness*'))
+          system(paste0('rm -f ', output.directory(), '/*indeces* ', output.directory(), '/*fitness*'))
           return("Done")
         }else{
-          return("Error processing data. Please check input file format and parameter choice.")
+          return("Error processing data. Please check input file format and parameter choice, as well as output directory.")
         }
       })
     }else{
