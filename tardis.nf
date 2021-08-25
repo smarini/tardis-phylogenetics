@@ -173,5 +173,6 @@ process Conclusion {
 	"""
 	#!/bin/bash
 	extractSeqs.py ${workflow.launchDir}/${params.outdir} ${params.afile} ${params.ngenerations} ${params.nbatches} ${params.nsamples} GA.${params.data_set}
+	Rscript ${workflow.projectDir}/bin/print.results.R -s ${params.data_set} -d ${params.distances} --metadata ${params.metadata} --outdir ${params.outdir} --ngenerations ${params.ngenerations} --n.batches ${params.nbatches} --distopt ${params.distopt}
 	"""
 }
