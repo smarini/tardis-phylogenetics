@@ -79,7 +79,7 @@ ui <- fluidPage(
             textInput("data.set", "Dataset name", value = "example.dataset", width = NULL)
             ),
     column( 4, offset = 1,
-            directoryInput('out.dir', label = 'Select output directory', value = getwd()) )
+            directoryInput('out.dir', label = 'Select output directory', value = '../shiny_output') )
   ),
   
   fluidRow(  
@@ -205,6 +205,7 @@ server <- function(input, output, session) {
 
     if(conditions){
       withProgress(message = 'Executing Tardis...', detail = "Running the GA", value = 0, {
+        system(paste('mkdir -p', output.directory()))
   
         incProgress(0, detail = paste("Initializing gen 0"))
         # init
