@@ -241,7 +241,7 @@ fi
 
 main_single() {
   FASTAS=""
-
+  
   if [ "$MODE" == "BF" ];
   then
     echo "*** Executing Brute Force method..."
@@ -259,8 +259,8 @@ main_single() {
              --distances $INDIR/$DFILE --metadata $INDIR/$MFILE $NGENS $NBATCHES $DISTOPT \
              --outdir $OUTDIR --afile $INDIR/$AFILE
 
-    Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --outdir $OUTDIR 
-             --distances $INDIR/$DFILE $NBATCHES $NGENS $DISTOPT >& R.log
+#    Rscript ${TARDIS_HOME}/bin/print.results.R -s $DATASET -d $INDIR/$DFILE --metadata $INDIR/$MFILE --outdir $OUTDIR \
+#             --distances $INDIR/$DFILE $NBATCHES $NGENS $DISTOPT >& R.log
     echo "*** GA done."
     echo
   fi
@@ -273,8 +273,8 @@ main_single() {
     rm -f $OUTDIR/${MODE}.*.fitness.csv $OUTDIR/${MODE}.*.subsamples.csv
   fi
   
-  echo -e "${R}*** Final results:"
-  for f in $OUTDIR/subsample.${MODE}.${DATASET}.*.fa;
+  echo -e "${R}*** ${DATASET} Final results:"
+  for f in $OUTDIR/${BYGROUP}subsample.${MODE}.${DATASET}.*.fa;
     do 
       echo "  " $f
   done
@@ -289,10 +289,10 @@ main_single() {
 main_groups() {
   CONFIGS=""
   NOCONFIGS=""
-
+  export BYGROUP="by.group/"
   for path in $(Rscript $TARDIS_HOME/bin/split.groups.R --genome.file $INDIR/$AFILE --metadata $INDIR/$MFILE --base.dir $RUNDIR --group.parameters $GROUPFILE 2>$LOGFILE);
     do
-      echo $path
+#     echo $path
       case $path in
 	  *.config)
 	      CONFIGS="$CONFIGS $path"
@@ -326,6 +326,9 @@ main_groups() {
   mkdir -p ${OUTDIR}/by.group
   mv ${OUTDIR}/* ${OUTDIR}/by.group 2>/dev/null
   cat ${OUTDIR}/by.group/subsample.GA.*.1.fa > ${OUTDIR}/subsample.GA.final.fa
+  echo -e "${R}*** Final results: "
+  echo "  ${OUTDIR}/subsample.GA.final.fa"
+  echo -e $N
 
   if [[ "$NOCONFIGS" != "" ]];
   then
