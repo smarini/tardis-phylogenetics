@@ -91,7 +91,7 @@ defines the number of batches. So to have a 500K population split into 50 batche
 # Dependencies and OS
 To run TARDis, please install
 * [R >= 3.6.1](https://www.r-project.org/)
-* [Pyhton >= 3.7](https://www.python.org/) (works with Pyhton 2.7 as well)
+* [Python >= 3.7](https://www.python.org/) (works with Python 2.7 as well)
 * [optparse >= 1.6.6](https://cran.r-project.org/web/packages/optparse/index.html)
 * [doRNG >= 1.8.2](https://cran.r-project.org/web/packages/doRNG/index.html)
 * [dplyr >= 1.0.0](https://cran.r-project.org/web/packages/dplyr/index.html)
