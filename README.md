@@ -8,13 +8,14 @@ Download TARDis and make sure [dependencies](#dependencies-and-os) are installed
 
 and the TARDiS explorer GUI will open in your default browser. Retrieve example data in `data/example` and click on `Run Tardis`.
 
-# Yes but what does TARDiS do exactly?
+# Yes, but what does TARDiS do exactly?
 TARDiS subsamples genetic data sets optimizing genetic diversity and temporal sampling according to parameters set by the users. The optimization is driven by a genetic algorithm.
 
 # Citation
 A paper describing TARDiS principles and application is
 
-* [Marini S, et al. Optimizing viral genome subsampling by genetic diversity and temporal distribution (TARDiS) for Phylogenetics](https://www.biorxiv.org/content/10.1101/2021.01.15.426832v1)
+* [Bionformatics 2021](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/btab725/6407117). Simone Marini, Carla Mavian, Alberto Riva, Mattia Prosperi, Marco Salemi, Brittany Rife Magalis, Optimizing viral genome subsampling by genetic diversity and temporal distribution (TARDiS) for phylogenetics, Bioinformatics, 2021;, btab725, https://doi.org/10.1093/bioinformatics/btab725
+* [Preprint on bioRxiv](https://www.biorxiv.org/content/10.1101/2021.01.15.426832v1)
 
 In an early, simplified version, TARDiS principles were also applied in:
 
@@ -110,6 +111,9 @@ To calculate Jukes-Cantor distances
 
 TARDiS has been successfully used on Linux Ubuntu (local, commandline), Chrome (GUI) and SLURM (hpc). Please let use know if you are using it on other platforms.
 
+# TARDiS slides
+To known more about TARDiS principles and practical application, check out the [TARDiS presentation](https://github.com/smarini/tardis-phylogenetics/raw/master/) at the [VEME Workshop 2021](https://rega.kuleuven.be/cev/veme-workshop/2021).
+
 # Contacts
 * [Simone Marini](https://github.com/smarini)
 * [Alberto Riva](https://github.com/albertoriva)
@@ -126,4 +130,5 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 See <https://www.gnu.org/licenses/>.
+
 
