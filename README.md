@@ -83,8 +83,6 @@ To run the aforementioned group example, run
 ./tardis -g data/example_group/parameters.group.csv -m data/example_group/metadata.group.csv -a data/example_group/aln.group.fa
 ```
 
-
-
 ### Batches
 To ease the calculation burden for large populations, data can be split into batches. Remember that params.gensize defines the number of individuals per batch, while params.nbatches
 defines the number of batches. So to have a 500K population split into 50 batches of 10K individuals each, you can set `params.gensize = 10000`, and `params.nbatches = 50`. Note that this will submit 50 jobs (1 per batch) for each generation to your workload manager. When all jobs in the first generation are  complete, the 50 jobs for the next generation will be submitted, and so on.
@@ -112,7 +110,7 @@ To calculate Jukes-Cantor distances
 TARDiS has been successfully used on Linux Ubuntu (local, commandline), Chrome (GUI) and SLURM (hpc). Please let use know if you are using it on other platforms.
 
 # TARDiS slides
-To known more about TARDiS principles and practical application, check out the [TARDiS presentation](https://github.com/smarini/tardis-phylogenetics/raw/master/) at the [VEME Workshop 2021](https://rega.kuleuven.be/cev/veme-workshop/2021).
+To known more about TARDiS principles and practical application, check out the [TARDiS presentation](https://github.com/smarini/tardis-phylogenetics/raw/master/TARDIS_at_VEME.pdf) at the [VEME Workshop 2021](https://rega.kuleuven.be/cev/veme-workshop/2021).
 
 # Contacts
 * [Simone Marini](https://github.com/smarini)
