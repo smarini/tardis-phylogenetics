@@ -102,7 +102,7 @@ For the GUI/explorer version, please install
 * [directoryInput >= 137dc69](https://github.com/wleepang/shiny-directory-input)
 
 For the local/hpc command line version, please install
-* [Nextflow >= 20.01.0](https://www.nextflow.io/docs/latest/getstarted.html)
+* [Nextflow >= 20.01.0 and <= 22.10.6]([https://www.nextflow.io/docs/latest/getstarted.html](https://github.com/nextflow-io/nextflow/releases/tag/v22.10.4)). **Important**: Due to changes in the newer versions of Nextflow, TARDiS will not work with versions 23+.
 
 To calculate Jukes-Cantor distances
 * [DECIPHER >= 2.14](https://bioconductor.org/packages/release/bioc/html/DECIPHER.html)
